@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>API配置管理
+						<small>API列表</small>
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+							<i class="fa fa-chevron-up"></i>
+						</a>
+						<a class="close-link">
+							<i class="fa fa-times"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div class="btn-group hidden-xs" id="servicetoolbar" role="group">
+						<button shiro:hasPermission="gateway:service:add" type="button" class="btn btn-outline btn-default" title="新增" onclick="add()">
+							<i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+						</button>
+						<button shiro:hasPermission="gateway:service:import" type="button" class="btn btn-outline btn-default" title="导入" onclick="leadingIn()">
+							<i class="glyphicon glyphicon-import" aria-hidden="true"></i>
+						</button>
+
+                        <label class="control-label" style="margin-right: 15px;margin-left: 15px">API查询 </label>
+                        <select class="selectpicker" data-width="auto" data-live-search="true" data-style="btn-white" id="serviceSlect" name="serviceSlect">
+                            <option value="">所有</option>
+                            <option th:each="service:${select}" th:value="${service.id}" th:attr="data-subtext=${service.path}"
+                                    th:text="${service.name}"/>
+                        </select>
+					</div>
+
+					<table id="serviceListTable"></table>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</div>
+
+<scpript th:include="common/iframeInclud :: footer"></scpript>
+<script type="text/javascript" th:src="@{/js/plugins/handlebars/handlebars-v4.0.12.js}"></script>
+<scpript th:include="gateway/service/importService"></scpript>
+<script type="text/javascript" th:src="@{/js/appjs/gateway/service/list.js}"></script>
+
+<script type="text/javascript">
+    var s_edit_h = 'hidden';
+    var s_remove_h = 'hidden';
+    var s_leading_out_h = 'hidden';
+    var s_review_h = 'hidden';
+</script>
+<div shiro:hasPermission="gateway:service:edit">
+	<script type="text/javascript">
+        s_edit_h = '';
+	</script>
+</div>
+<div shiro:hasPermission="gateway:service:remove">
+	<script type="text/javascript">
+        s_remove_h = '';
+	</script>
+</div>
+<div shiro:hasPermission="gateway:service:export">
+	<script type="text/javascript">
+		s_leading_out_h = '';
+	</script>
+</div>
+<div shiro:hasPermission="gateway:service:review">
+	<script type="text/javascript">
+		s_review_h = '';
+	</script>
+</div>
+
+</body>
+
+</html>
+

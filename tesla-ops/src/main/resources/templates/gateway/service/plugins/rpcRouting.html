@@ -1,0 +1,174 @@
+<script type="text/x-handlebars-template" id="endpoint_rpcRouting_tmpl">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            后端endpoint插件配置-rpc路由转换
+        </div>
+        <div class="panel-body" name="endpoint_plugin_rpcRouting">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">rpc类型</label>
+                <div class="col-sm-6">
+                    <select class="form-control m-b selectpicker"
+                            data-style="btn-white"
+                            name="rpcType">
+                        <option value="dubbo" data-tmpl="endpoint_rpc_dubbo_tmpl">Dubbo</option>
+                        <option value="grpc" data-tmpl="endpoint_rpc_grpc_tmpl">gRPC</option>
+                    </select>
+                </div>
+            </div>
+            <div name="rpcRoutingConent">
+
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="endpoint_rpc_dubbo_tmpl">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">服务名称</label>
+        <div class="col-sm-6">
+            <input name="serviceName" class="form-control" placeholder="服务名称" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">服务group</label>
+        <div class="col-sm-6">
+            <input name="group" class="form-control" placeholder="服务group" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">服务version</label>
+        <div class="col-sm-6">
+            <input name="version" class="form-control" placeholder="服务version" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">方法名称</label>
+        <div class="col-sm-6">
+            <input name="methodName" class="form-control" placeholder="方法名称" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">参数转换模板</label>
+        <div class="col-sm-6">
+            <textarea name="dubboParamTemplate" class="form-control"
+                      rows="4"></textarea>
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+</script>
+<script type="text/x-handlebars-template" id="endpoint_rpc_grpc_tmpl">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">服务名称</label>
+        <div class="col-sm-6">
+            <input name="serviceName" class="form-control" placeholder="服务名称" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">服务group</label>
+        <div class="col-sm-6">
+            <input name="group" class="form-control" placeholder="服务group" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">服务version</label>
+        <div class="col-sm-6">
+            <input name="version" class="form-control" placeholder="服务version" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">方法名称</label>
+        <div class="col-sm-6">
+            <input name="methodName" class="form-control" placeholder="方法名称" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">grpc定义文件</label>
+        <div class="col-sm-6">
+            <input type="hidden" name="protoFileId">
+            <input type="file" name="protoFile" class="form-control" accept=".zip">
+            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                请上传grpc定义文件 </span>
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+</script>
+
+
+<script>
+    rpcRoutingConfig = {
+        init: function (endpointDiv, authType) {
+            var data = {};
+            var tpl = $("#endpoint_rpcRouting_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").append(html);
+            endpointDiv.find("div[name='endpoint_plugin_rpcRouting']").find("select[name='rpcType']").selectpicker('refresh');
+            endpointDiv.find("div[name='endpoint_plugin_rpcRouting']").find("select[name='rpcType']").change(function () {
+                rpcRoutingConfig.changeAuthContent(endpointDiv);
+            });
+            endpointDiv.find("div[name='endpoint_plugin_rpcRouting']").find("select[name='rpcType']").change();
+        },
+        changeAuthContent: function (endpointDiv) {
+            var data = {};
+            var tpl = $("#" + endpointDiv.find("div[name='endpoint_plugin_rpcRouting']").
+            find("select[name='rpcType']").find("option:selected").data("tmpl")).html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='endpoint_plugin_rpcRouting']").find("div[name='rpcRoutingConent']").html(html);
+            endpointDiv.find("input[name='protoFile']").prettyFile();
+            var templateName = "dubboTemplate--ftl";
+            var mode = "javascript";
+            initTextArea(endpointDiv.find("div[name='endpoint_plugin_rpcRouting']"), templateName, mode);
+            endpointDiv.find("div[name='endpoint_plugin_rpcRouting']").find("input[name='protoFile']").change(function () {
+                            var jarName = endpointDiv.attr("id")+"::"+endpointDiv.find("div[name='endpoint_plugin_rpcRouting']")
+                                .find("input[name='protoFile']").val();
+                            endpointDiv.find("div[name='endpoint_plugin_rpcRouting']").find("input[name='protoFileId']").val(jarName);
+                        });
+
+        },
+        remove: function (endpointDiv, authType) {
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").find("div[name='endpoint_plugin_rpcRouting']").parent().remove();
+        },
+        getFormatResult: function (endpointDiv, pluginList) {
+            var rpcRoutingDefinition = {};
+            rpcRoutingDefinition.rpcType = endpointDiv.find("div[name='endpoint_plugin_rpcRouting']").find("select[name='rpcType']").val();
+            var paramDefinition = {};
+            $.each(endpointDiv.find("div[name='endpoint_plugin_rpcRouting']").find("input,textarea"), function (i, val) {
+                if($(val).attr("type") == "file"){
+                    return;
+                }
+                paramDefinition[ $(val).attr("name")] = $(val).val();
+            })
+            rpcRoutingDefinition.rpcParamJson = JSON.stringify(paramDefinition);
+            var plugin = {};
+            plugin.pluginType = "RpcRoutingRequestPlugin";
+            plugin.pluginName = "Rpc路由配置插件";
+            plugin.pluginParam = JSON.stringify(rpcRoutingDefinition);
+            pluginList.push(plugin);
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, endpointDiv, pluginType) {
+            var rpcRoutingDefinition = JSON.parse(pluginParam);
+            endpointDiv.find("div[name='endpoint_plugin_rpcRouting']").find("select[name='rpcType']")
+                .selectpicker('val', rpcRoutingDefinition.rpcType);
+
+            var type;
+            if (pluginType == "CreateTokenRequestPlugin") {
+                type = "request";
+            } else if (pluginType == "CreateTokenResponsePlugin") {
+                type = "response";
+            }
+            var paramDefinition = JSON.parse(rpcRoutingDefinition.rpcParamJson);
+            Object.keys(paramDefinition).forEach(function (key) {
+                endpointDiv.find("div[name='endpoint_plugin_rpcRouting']").
+                find("input[name='" + key + "'],textarea[name='" + key + "']").val(paramDefinition[key]);
+                endpointDiv.find("div[name='endpoint_plugin_rpcRouting']").
+                find("input[name='" + key + "'],textarea[name='" + key + "']").change();
+            });
+        }
+    }
+</script>

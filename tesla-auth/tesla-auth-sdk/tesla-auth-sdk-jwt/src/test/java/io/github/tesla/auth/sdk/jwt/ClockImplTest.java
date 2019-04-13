@@ -1,0 +1,22 @@
+package io.github.tesla.auth.sdk.jwt;
+
+import io.github.tesla.auth.sdk.jwt.ClockImpl;
+import io.github.tesla.auth.sdk.jwt.interfaces.Clock;
+import org.junit.Test;
+
+import java.util.Date;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.*;
+
+public class ClockImplTest {
+
+    @Test
+    public void shouldGetToday() throws Exception{
+        Clock clock = new ClockImpl();
+        Date clockToday = clock.getToday();
+        assertThat(clockToday, is(notNullValue()));
+    }
+
+}

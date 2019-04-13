@@ -1,0 +1,14 @@
+app:
+  id: osg
+spring:
+  application:
+    name: tesla-oauth2-server
+    group: platform
+    version: 1.0.0
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      #defaultZone: ${SPRINGCLOUD_REGISTRY_ADDRESS}
+      defaultZone: http://127.0.0.1:13680/eureka

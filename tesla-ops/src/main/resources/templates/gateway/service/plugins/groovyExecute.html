@@ -1,0 +1,101 @@
+<script type="text/x-handlebars-template" id="endpoint_groovyExecute_tmpl">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            后端endpoint插件配置-groovy插件
+        </div>
+        <div class="panel-body" name="endpoint_plugin_groovyExecute">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#endpoint_plugin_groovyExecute_request_{{endpointDivId}}"
+                           aria-expanded="true">
+                            REQUEST</a>
+                    </li>
+                    <li class="">
+                        <a data-toggle="tab" href="#endpoint_plugin_groovyExecute_response_{{endpointDivId}}"
+                           aria-expanded="false">
+                            RESPONSE</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="endpoint_plugin_groovyExecute_request_{{endpointDivId}}"
+                         name="endpoint_plugin_groovyExecute_request" class="tab-pane active">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">groovy脚本</label>
+                                <div class="col-sm-8">
+                                    <textarea name="groovyScript" class="form-control"
+                                              placeholder="groovy脚本" rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="endpoint_plugin_groovyExecute_response_{{endpointDivId}}"
+                         name="endpoint_plugin_groovyExecute_response" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">groovy脚本</label>
+                                <div class="col-sm-8">
+                                    <textarea name="groovyScript" class="form-control"
+                                              placeholder="groovy脚本" rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+    groovyExecuteConfig = {
+        init: function (endpointDiv, authType) {
+            var endpointDivId = endpointDiv.attr("id");
+            var data = {endpointDivId: endpointDivId};
+            var tpl = $("#endpoint_groovyExecute_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").append(html);
+            var mode = "groovy";
+            initTextArea(endpointDiv.find("div[name='endpoint_plugin_groovyExecute_request']"), "groovy_request--groovy", mode);
+            initTextArea(endpointDiv.find("div[name='endpoint_plugin_groovyExecute_response']"), "groovy_response--groovy", mode);
+        },
+        remove: function (endpointDiv, authType) {
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").find("div[name='endpoint_plugin_groovyExecute']").parent().remove();
+        },
+        getFormatResult: function (endpointDiv, pluginList) {
+            pluginList = groovyExecuteConfig.getFormatResultByType(endpointDiv, pluginList, "request");
+            pluginList = groovyExecuteConfig.getFormatResultByType(endpointDiv, pluginList, "response");
+            return pluginList;
+        },
+        getFormatResultByType: function (endpointDiv, pluginList, type) {
+            var plugin = {};
+            if (type == "request") {
+                plugin.pluginType = "GroovyExecuteRequestPlugin";
+            } else if (type == "response") {
+                plugin.pluginType = "GroovyExecuteResponsePlugin";
+            }
+            var groovyExecuteDefinition = {};
+            groovyExecuteDefinition.groovyScript = endpointDiv.find("div[name='endpoint_plugin_groovyExecute_" + type + "']").find("textarea").val();
+            if (groovyExecuteDefinition.groovyScript != "") {
+                plugin.pluginName = "groovy脚本执行插件";
+                plugin.pluginParam = JSON.stringify(groovyExecuteDefinition);
+                pluginList.push(plugin);
+            }
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, endpointDiv, pluginType) {
+            var groovyExecuteDefinition = JSON.parse(pluginParam);
+            var type;
+            if (pluginType == "GroovyExecuteRequestPlugin") {
+                type = "request"
+            } else if (pluginType == "GroovyExecuteResponsePlugin") {
+                type = "response"
+            }
+            endpointDiv.find("div[name='endpoint_plugin_groovyExecute_" + type + "']").find("textarea").val(groovyExecuteDefinition.groovyScript);
+            endpointDiv.find("div[name='endpoint_plugin_groovyExecute_" + type + "']").find("textarea").change();
+        }
+    }
+</script>

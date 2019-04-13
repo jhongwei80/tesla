@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="ibox-content">
+                <form class="form-horizontal m-t" id="resetPasswdForm">
+                    <input id="userId" name="userId" th:value="${user.userId}" type="hidden">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">用户名：</label>
+                        <div class="col-sm-8">
+                            <input id="username" name="username" class="form-control" type="text" th:value="${user.username}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">新密码：</label>
+                        <div class="col-sm-8">
+                            <input id="newPasswd" name="newPasswd" class="form-control" type="password" placeholder="请输入新密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">确认密码：</label>
+                        <div class="col-sm-8">
+                            <input id="confirmPasswd" name="confirmPasswd" class="form-control" type="password" placeholder="请确认密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-3">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="common/iframeInclud :: footer"></div>
+<script type="text/javascript">
+$(function() {
+    formValidator();
+});
+
+var formValidator = function() {
+    var e = "<i class='fa fa-times-circle'></i> ";
+    $.extend($.validator.defaults,{ignore:""});
+    $("#resetPasswdForm").validate({
+        rules: {
+            newPasswd: {
+                required: true,
+                minlength: 6
+            },
+            confirmPasswd: {
+                required: true,
+                minlength: 6,
+                equalTo: "#newPasswd"
+            }
+        },
+        messages: {
+            newPasswd: {
+                required: e + "请输入密码",
+                minlength: e + "密码必须6个字符以上"
+            },
+            confirmPasswd: {
+                required: e + "请输入确认密码",
+                minlength: e + "密码必须6个字符以上",
+                equalTo: e + "两次输入密码不一致",
+            }
+        },
+        submitHandler: function(form) {
+            swal({
+                title: "修改密码？",
+                text: "是否确定修改密码？",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "保存",
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true
+            }, function () {
+                $.ajax({
+                    cache: true,
+                    type: "post",
+                    url: "/api/sys/user/resetPwd",
+                    data: $(form).serialize(),
+                    async: true,
+                    success: function (data) {
+                        if (ajaxIsSuccess(data)) {
+                            swal({
+                                title: "修改密码成功！",
+                                text: "修改密码成功,请刷新！",
+                                type: "success"
+                            }, function (e) {
+                                removeIframe();
+                            });
+                        } else {
+                            swal("修改密码失败！", "修改密码失败。", "error");
+                        }
+                    }
+                });
+            });
+        }
+    });
+};
+
+</script>
+</body>
+</html>

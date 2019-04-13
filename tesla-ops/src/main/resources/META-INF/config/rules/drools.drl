@@ -1,0 +1,38 @@
+package io.github.tesla.gateway.netty.filter.drools
+
+import com.bkjk.gateway.filter.help.BodyMapping
+import com.bkjk.gateway.filter.help.HeaderMapping
+import com.bkjk.gateway.filter.help.DroolsContext
+
+
+declare User
+    name : String
+    mobile : String
+    idNo : String
+end
+
+rule "condition: call userService to judge user is normal"
+no-loop true
+when
+    $body:BodyMapping()
+    $header:HeaderMapping()
+    $context:DroolsContext()
+then
+    User user = new User();
+    user.setName($body.json("$.name"));
+    user.setMobile($body.json("$.mobile"));
+    user.setIdNo($body.json("$.idNo"));
+    String userInfo = $context.toJSONString(user);
+    String returnUserInfo = $context.callService("tesla","/user",userInfo, "POST");
+    User returnUser = $context.parseObject(returnUserInfo,User.class);
+    insert(returnUser);
+end
+
+rule "condition: judge to jingdong or internal service"
+no-loop true
+when
+     $user:User(name=="test",mobile=="123")
+     $context:DroolsContext()
+then
+     $context.setResponse("www.baidu.com");
+end

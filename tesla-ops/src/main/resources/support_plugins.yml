@@ -1,0 +1,58 @@
+endpoint:
+  ModifyHeaderRequestPlugin:
+    type: ModifyHeader
+    name: 请求头配置
+  JarExecuteRequestPlugin:
+    type: JarExecute
+    name: 执行上传Jar包
+  GroovyExecuteResponsePlugin:
+    type: GroovyExecute
+    name: groovy脚本执行
+  MockRequestPlugin:
+    type: Mock
+    name: mock插件
+  IgnoreAuthRequestPlugin:
+    type: IgnoreAuth
+    name: 消除鉴权控制
+  BodyTransformRequestPlugin:
+    type: BodyTransform
+    name: 请求报文转换
+  SignatureVerifyRequestPlugin:
+    type: SignatureVerify
+    name: 签名验证
+  CreateTokenResponsePlugin:
+    type: CreateToken
+    name: 创建token
+  GroovyExecuteRequestPlugin:
+    type: GroovyExecute
+    name: groovy脚本执行
+  PathTransformRequestPlugin:
+    type: PathTransform
+    name: url重写
+  CacheResultPlugin:
+    type: CacheResult
+    name: 缓存结果插件
+  CreateTokenRequestPlugin:
+    type: CreateToken
+    name: 创建token
+  QueryConvergeRequestPlugin:
+    type: QueryConverge
+    name: 查询聚合插件
+  BodyTransformResponsePlugin:
+    type: BodyTransform
+    name: 请求报文转换
+  JarExecuteResponsePlugin:
+    type: JarExecute
+    name: 执行上传Jar包
+  SilentRegistrationRequestPlugin:
+    type: SilentRegistration
+    name: 静默注册
+  RpcRoutingRequestPlugin:
+    type: RpcRouting
+    name: Rpc路由配置
+  AccessTokenRequestPlugin:
+    type: AccessToken
+    name: accessToken校验
+  BodyValidateRequestPlugin:
+    type: BodyValidate
+    name: 请求报文校验

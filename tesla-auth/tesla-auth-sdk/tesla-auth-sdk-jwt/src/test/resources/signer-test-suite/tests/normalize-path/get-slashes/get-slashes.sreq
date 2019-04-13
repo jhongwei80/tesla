@@ -1,0 +1,4 @@
+GET //example// HTTP/1.1
+Host:example.amazonaws.com
+X-Ke-Date:20150830T123600Z
+Authorization: BKJK-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/bkjk_request, SignedHeaders=host;x-ke-date, Signature=1eb75335ca1e8fa6d4c9afab70625a2bcfe9cce211f1554e86796272361c5254

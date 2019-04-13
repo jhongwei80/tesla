@@ -1,0 +1,1 @@
+org.springframework.context.ApplicationContextInitializer=io.github.tesla.auth.server.oauth.support.BeanProvider

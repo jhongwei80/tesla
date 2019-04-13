@@ -1,0 +1,62 @@
+<script type="text/x-handlebars-template" id="rateLimitTmpl">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">启用限流</label>
+        <div class="col-sm-6">
+            <select class="form-control m-b selectpicker"
+                    data-style="btn-white" name="enabled">
+                <option value="N">禁用</option>
+                <option value="Y">启用</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">单位时间频率</label>
+        <div class="col-sm-6">
+            <input name="rate" class="form-control" placeholder="单位时间频率" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">单位时间(秒)</label>
+        <div class="col-sm-6">
+            <input name="perSeconds" class="form-control" placeholder="单位时间" type="text">
+        </div>
+    </div>
+    <input name="appId" type="hidden">
+</script>
+
+<script>
+    rateLimitConfig = {
+        init: function (divObj) {
+            var data = {};
+            var tpl = $("#rateLimitTmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            $(divObj).html(html);
+        },
+        getFormatResult: function (divObj, pluginList) {
+            var rateLimitDefinition = {};
+            var enable = false;
+            $.each($(divObj).find("input,select"), function (i, val) {
+                if ($(val).attr("name") == "enabled" && $(val).val() == "Y") {
+                    enable = true;
+                }
+                rateLimitDefinition[ $(val).attr("name")] = $(val).val();
+            })
+            if (!enable) {
+                return pluginList;
+            }
+            var plugin = {};
+            plugin.pluginType = "RateLimitRequestPlugin";
+            plugin.pluginName = "访问API限流插件";
+            plugin.pluginParam = JSON.stringify(rateLimitDefinition);
+            pluginList.push(plugin);
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, divObj) {
+            var rateLimitDefinition = JSON.parse(pluginParam);
+            Object.keys(rateLimitDefinition).forEach(function (key) {
+                $(divObj).find("input[name='" + key + "'],select[name='" + key + "']").val(rateLimitDefinition[key]);
+            });
+        }
+    }
+</script>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-default" id="searchDiv">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<a data-toggle="collapse" data-parent="#searchDiv" href="#collapseOne">查询条件</a>
+					</h5>
+				</div>
+				<div id="collapseOne" class="panel-collapse collapse in">
+					<div class="panel-body form-horizontal">
+						<div class="col-sm-4 form-group">
+							<label class="control-label col-sm-3 " >用户名 </label>
+							<div class="col-sm-8">
+								<input id="searchUsername" name="searchUsername" class="form-control" type="text">
+							</div>
+						</div>
+						<div class="col-sm-4 form-group">
+							<label class="control-label  col-sm-3 " >操作类型 </label>
+							<div class="col-sm-8">
+							<input id="searchOperation" name="searchOperation" class="form-control" type="text">
+							</div>
+						</div>
+						<div class="col-sm-4" style="text-align: right">
+							<button id="advanceSearch" onclick="reLoad()" class="btn btn-w-m btn-info">搜索</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>日志管理
+						<small>日志管理列表</small>
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+							<i class="fa fa-chevron-up"></i>
+						</a>
+						<a class="close-link">
+							<i class="fa fa-times"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div class="btn-group hidden-xs" id="logtoolbar" role="group">
+
+						<button shiro:hasPermission="sys:monitor:log" type="button" class="btn btn-outline btn-default" onclick="batchRemove()">
+							<i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+						</button>
+
+					</div>
+
+					<table id="onlineLog"></table>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<scpript th:include="common/iframeInclud :: footer"></scpript>
+<script type="text/javascript" th:src="@{/js/appjs/system/log/log.js}"></script>
+

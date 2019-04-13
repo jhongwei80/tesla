@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>认证管理 <small>客户端管理</small></h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        <a class="close-link"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div id="userToolBar" class="form-inline">
+                        <div class="btn-group hidden-xs pull-left" role="group">
+                            <button shiro:hasPermission="oauth:client:add" type="button" class="btn btn-outline btn-default" title="新增" onclick="add()">
+                                <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                            </button>
+
+
+                            <!--<label class="control-label" style="margin-right: 15px;margin-left: 15px">客户端查询 </label>
+                            <select class="selectpicker" data-width="auto" data-live-search="true" data-style="btn-white" id="serviceSlect" name="serviceSlect">
+                                <option value="">所有</option>-->
+                                <!--<option th:each="service:${select}" th:value="${service.id}" th:attr="data-subtext=${service.path}"
+                                        th:text="${service.name}"/>-->
+                            </select>
+
+                        </div>
+                    </div>
+                    <table id="clientTable" data-mobile-responsive="true" class="mb-bootstrap-table text-nowrap"></table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:include="common/iframeInclud :: footer"></div>
+<script type="text/javascript" src="/js/appjs/oauth/client/list.js"></script>
+
+<div>
+    <script type="text/javascript">
+        var s_add_h = 'hidden';
+        var s_edit_h = 'hidden';
+        var s_remove_h = 'hidden';
+    </script>
+</div>
+
+<div shiro:hasPermission="oauth:client:edit">
+    <script type="text/javascript">
+        s_edit_h = '';
+    </script>
+</div>
+<div shiro:hasPermission="oauth:client:remove">
+    <script type="text/javascript">
+        s_remove_h = '';
+    </script>
+</div>
+<div shiro:hasPermission="oauth:client:add">
+    <script type="text/javascript">
+        s_add_h = '';
+    </script>
+</div>
+</body>
+</html>

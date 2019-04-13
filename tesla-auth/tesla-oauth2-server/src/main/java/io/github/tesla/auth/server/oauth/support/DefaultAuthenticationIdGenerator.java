@@ -1,0 +1,58 @@
+package io.github.tesla.auth.server.oauth.support;
+
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.oltu.oauth2.common.OAuth;
+import org.apache.oltu.oauth2.common.utils.OAuthUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+/**
+ * 15-6-20
+ * <p/>
+ * AuthenticationId 的生成器 MD5加密
+ *
+ *
+ */
+@Component
+public class DefaultAuthenticationIdGenerator {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultAuthenticationIdGenerator.class);
+
+    public DefaultAuthenticationIdGenerator() {}
+
+    public String generate(String clientId, String username, String scope) {
+        Map<String, String> map = new HashMap<>();
+        map.put(OAuth.OAUTH_CLIENT_ID, clientId);
+        // check it is client only
+        if (!clientId.equals(username)) {
+            map.put(OAuth.OAUTH_USERNAME, username);
+        }
+        if (!OAuthUtils.isEmpty(scope)) {
+            map.put(OAuth.OAUTH_SCOPE, scope);
+        }
+
+        return digest(map);
+    }
+
+    protected String digest(Map<String, String> map) {
+        MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            LOGGER.warn("Digest error", e);
+            throw new IllegalStateException("MD5 algorithm not available.  Fatal (should be in the JDK).");
+        }
+
+        byte[] bytes = digest.digest(map.toString().getBytes(StandardCharsets.UTF_8));
+        return String.format("%032x", new BigInteger(1, bytes));
+    }
+
+}

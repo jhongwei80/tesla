@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: tesla-backend-sample
+    group: bkjk
+    version: 1.0.0

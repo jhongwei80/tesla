@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.tesla.auth.server.oauth.dao.OauthMapper">
+
+
+    <select id="findClientDetailsListByClientId"
+            resultType="io.github.tesla.auth.server.oauth.domian.oauth.ClientDetails">
+        select * from oauth_client_details where archived = 0
+        <if test="_parameter != null and _parameter != ''">and client_id = #{_parameter}</if>
+        order by create_time desc
+    </select>
+
+    <insert id="saveClientDetails" parameterType="io.github.tesla.auth.server.oauth.domian.oauth.ClientDetails"
+            useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO oauth_client_details (
+			client_id,
+			client_secret,
+			client_name,
+			client_uri,
+			client_icon_uri,
+			resource_ids,
+			scope,
+			grant_types,
+			redirect_uri,
+			roles,
+			access_token_validity,
+			refresh_token_validity,
+			description,
+			archived,
+			trusted,
+			create_time
+		)
+		VALUES
+		(
+			#{clientId},
+			#{clientSecret},
+			#{clientName},
+			#{clientUri},
+			#{clientIconUri},
+			#{resourceIds},
+			#{scope},
+			#{grantTypes},
+			#{redirectUri},
+			#{roles},
+			#{accessTokenValidity},
+			#{refreshTokenValidity},
+			#{description},
+			#{archived},
+			#{trusted},
+			#{createTime}
+		)
+	</insert>
+
+    <insert id="saveOauthCode" parameterType="io.github.tesla.auth.server.oauth.domian.oauth.OauthCode"
+            useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO oauth_code(
+			code,username,client_id,create_time
+		)
+		VALUES
+		(
+			#{code},#{username},#{clientId},
+			#{createTime}
+		)
+	</insert>
+
+
+    <select id="findOauthCode" resultType="io.github.tesla.auth.server.oauth.domian.oauth.OauthCode">
+        select * from oauth_code
+        <where>
+            <if test="code != null and code != ''">and code = #{code}</if>
+            <if test="username != null and username != ''">and username = #{username}</if>
+            <if test="clientId != null and clientId != ''">and client_id = #{clientId}</if>
+        </where>
+    </select>
+    <select id="findAccessToken" resultType="io.github.tesla.auth.server.oauth.domian.oauth.AccessToken">
+        select * from oauth_access_token
+        <where>
+            <if test="clientId != null and clientId != ''">and client_id = #{clientId}</if>
+            <if test="username != null and username != ''">and username = #{username}</if>
+            <if test="refreshToken != null and refreshToken != ''">and refresh_token = #{refreshToken}</if>
+            <if test="authenticationId != null and authenticationId != ''">and authentication_id = #{authenticationId}
+            </if>
+        </where>
+
+    </select>
+    <delete id="deleteAccessToken" parameterType="io.github.tesla.auth.server.oauth.domian.oauth.AccessToken">
+		delete from oauth_access_token where client_id = #{clientId}
+		and username = #{username} and authentication_id = #{authenticationId}
+	</delete>
+
+    <delete id="deleteOauthCode" parameterType="io.github.tesla.auth.server.oauth.domian.oauth.OauthCode">
+		delete from oauth_code where code = #{code} and client_id = #{clientId} and username =  #{username}
+	</delete>
+
+    <insert id="saveAccessToken" parameterType="io.github.tesla.auth.server.oauth.domian.oauth.AccessToken"
+            useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO oauth_access_token(
+			token_id,
+			token_expired_seconds,
+			authentication_id,
+			username,
+			client_id,
+			token_type,
+			refresh_token_expired_seconds,
+			refresh_token,
+			create_time
+		)
+		VALUES
+		(
+			#{tokenId},
+			#{tokenExpiredSeconds},
+			#{authenticationId},
+			#{username},
+			#{clientId},
+			#{tokenType},
+			#{refreshTokenExpiredSeconds},
+			#{refreshToken},
+			#{createTime}
+		)
+	</insert>
+
+</mapper>

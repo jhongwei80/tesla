@@ -1,0 +1,15 @@
+syntax = "proto3";
+option java_package = "io.github.tesla.grpc.user";
+option java_outer_classname = "User";
+package io.github.tesla.grpc.user;
+
+message UserRequest {
+    string name = 1;
+    string mobile = 2;
+    string idNo = 3;
+}
+message UserResponse {
+    string name = 1;
+    string mobile = 2;
+    string idNo = 3;
+}

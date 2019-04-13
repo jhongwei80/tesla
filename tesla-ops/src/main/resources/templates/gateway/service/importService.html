@@ -1,0 +1,28 @@
+<script type="text/x-handlebars-template" id="import_service_tmpl">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-horizontal" id="importServiceForm">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">API配置文件</label>
+                        <div class="col-sm-8">
+                            <input type="file" id="serviceJsonFile" name="serviceJsonFile" class="form-control" accept=".txt">
+                            <span class="help-block m-b-none"><i class="fa fa-info-circle">
+                                </i> 请上传以txt结尾的API配置文件
+                            </span>
+                            <span id="serviceJsonFileTip"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3"></label>
+                        <div class="col-sm-6">
+                            <button class="btn btn-sm btn-primary" type="submit"> 上传</button>
+                            <button class="btn btn-sm btn-default" id="closeImport" type="button"> 取消 </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>
+

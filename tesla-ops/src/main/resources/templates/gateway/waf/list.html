@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>WAF配置管理
+						<small>WAF列表</small>
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+							<i class="fa fa-chevron-up"></i>
+						</a>
+						<a class="close-link">
+							<i class="fa fa-times"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+
+					<table id="wafListTable"></table>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</div>
+
+<scpript th:include="common/iframeInclud :: footer"></scpript>
+<script type="text/javascript" th:src="@{/js/appjs/gateway/waf/list.js}"></script>
+
+<script type="text/javascript">
+    var s_edit_h = 'hidden';
+</script>
+<div shiro:hasPermission="gateway:waf:edit">
+	<script type="text/javascript">
+        s_edit_h = '';
+	</script>
+</div>
+
+
+</body>
+
+</html>
+

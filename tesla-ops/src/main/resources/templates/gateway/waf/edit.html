@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>编辑<span th:text="${wafVo.wafName}"/>配置</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="tab-pane active" id="service">
+                        <form class="form-horizontal" id="wafForm">
+                            <div class="panel-body">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        基础信息
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <input id="id" name="id" th:value="${wafVo.id}" type="hidden"/>
+                                            <input id="wafType" name="wafType" th:value="${wafVo.wafType}" type="hidden"/>
+                                            <label class="col-sm-3 control-label">Waf名称: </label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control" id="wafName" name="wafName"
+                                                       th:value="${wafVo.wafName}"
+                                                       type="text" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Waf描述: </label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control" name="wafDesc" th:value="${wafVo.wafDesc}"
+                                                       type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">是否启动: </label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control m-b selectpicker"
+                                                        data-style="btn-white"
+                                                        name="wafEnabled">
+                                                    <option th:selected="${wafVo.wafEnabled=='Y'}" value="Y">启用</option>
+                                                    <option th:selected="${wafVo.wafEnabled=='N'}" value="N">禁用</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="wafContent">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button class="btn btn-sm btn-primary" type="submit"> 保 存</button>
+                                    <button class="btn btn-sm btn-default" onclick="removeIframeWithSwal()"
+                                            type="button"> 关 闭
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<scpript th:include="common/iframeInclud :: footer"></scpript>
+<scpript th:include="gateway/waf/plugins/appKeyControl"></scpript>
+<scpript th:include="gateway/waf/plugins/textAreaContent"></scpript>
+<scpript th:include="gateway/waf/plugins/noContent"></scpript>
+<script th:src="@{/js/plugins/handlebars/handlebars-v4.0.12.js}" type="text/javascript"></script>
+<script th:src="@{/js/appjs/gateway/waf/edit.js}" type="text/javascript"></script>
+</body>
+<script th:inline="javascript">
+    var appControlOptions = [[${appControlOptions}]];
+    var wafVo = [[${wafVo}]];
+    $(function () {
+        getConfigByPlugin(wafVo.wafType).init($("#wafContent"), wafVo.pluginParam, appControlOptions);
+    })
+</script>
+
+</html>

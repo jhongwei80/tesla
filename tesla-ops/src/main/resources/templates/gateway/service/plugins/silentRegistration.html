@@ -1,0 +1,75 @@
+<script type="text/x-handlebars-template" id="endpoint_silentRegistration_tmpl">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            后端endpoint插件配置-静默注册
+        </div>
+        <div class="panel-body" name="endpoint_plugin_silentRegistration">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">claimsHeader</label>
+                <div class="col-sm-6">
+                    <input name="claimsHeaderKey" class="form-control" placeholder="注册成功后claims信息放到哪个header" type="text">
+                </div>
+                <span class="require_tip">*</span>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">uus服务版本号</label>
+                <div class="col-sm-6">
+                    <input name="uusServiceVersion" class="form-control" placeholder="uus服务版本号" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">uus服务组</label>
+                <div class="col-sm-6">
+                    <input name="uusServiceGroup" class="form-control" placeholder="uus服务组" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">请求过滤groovy脚本</label>
+                <div class="col-sm-6">
+                    <textarea name="shoulRunGroovy" class="form-control"
+                              rows="4"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+    silentRegistrationConfig = {
+        init: function (endpointDiv, authType) {
+            var data = {};
+            var tpl = $("#endpoint_silentRegistration_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").append(html);
+            var templateName = "silentRegistration--groovy";
+            var mode = "groovy";
+            initTextArea(endpointDiv.find("div[name='endpoint_plugin_silentRegistration']"),templateName,mode);
+        },
+        remove: function (endpointDiv, authType) {
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").find("div[name='endpoint_plugin_silentRegistration']").parent().remove();
+        },
+        getFormatResult: function (endpointDiv, pluginList) {
+            var silentRegistrationDefinition = {};
+            $.each(endpointDiv.find("div[name='endpoint_plugin_silentRegistration']").find("input,select,textarea"), function (i, val) {
+                silentRegistrationDefinition[ $(val).attr("name")] = $(val).val();
+            })
+            var plugin = {};
+            plugin.pluginType = "SilentRegistrationRequestPlugin";
+            plugin.pluginName = "静默注册插件";
+            plugin.pluginParam = JSON.stringify(silentRegistrationDefinition);
+            pluginList.push(plugin);
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, endpointDiv, pluginType) {
+            var silentRegistrationDefinition = JSON.parse(pluginParam);
+            Object.keys(silentRegistrationDefinition).forEach(function (key) {
+                var obj = endpointDiv.find("div[name='endpoint_plugin_silentRegistration']").
+                find("input[name='" + key + "'],textarea[name='" + key + "']");
+                obj.val(silentRegistrationDefinition[key]);
+                obj.change();
+            });
+        }
+    }
+</script>

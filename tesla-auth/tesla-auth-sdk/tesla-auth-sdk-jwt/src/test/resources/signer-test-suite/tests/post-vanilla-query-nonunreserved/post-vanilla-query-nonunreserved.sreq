@@ -1,0 +1,4 @@
+POST /?@#$%^&+=/,?><`";:\|][{} HTTP/1.1
+Host:example.amazonaws.com
+X-Ke-Date:20150830T123600Z
+Authorization: BKJK-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/bkjk_request, SignedHeaders=host;x-ke-date, Signature=300f382fc1ee60d850fb19b9da5d9bc743e72396221e2081b06ed16d5e68febd

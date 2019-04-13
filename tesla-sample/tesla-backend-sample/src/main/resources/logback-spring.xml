@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true">
+	<property name="logDir" value="${user.dir}/logs" />
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%date [%thread] %-5level %logger{50}:%L - %msg%n</pattern>
+		</layout>
+	</appender>
+	<appender name="logfile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${logDir}/access.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${logDir}/history/access.%d{yyyy-MM-dd}.log.gz
+			</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%date [%thread] %-5level %logger{50}:%L - %msg%n</pattern>
+		</layout>
+	</appender>
+	<root level="INFO">
+		<appender-ref ref="logfile" />
+		<appender-ref ref="stdout" />
+	</root>
+</configuration>

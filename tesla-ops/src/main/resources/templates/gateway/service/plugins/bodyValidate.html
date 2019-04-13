@@ -1,0 +1,136 @@
+<script id="endpoint_body_validate_tmpl" type="text/x-handlebars-template">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            后端endpoint插件配置-请求报文校验插件
+        </div>
+        <div class="panel-body" name="endpoint_plugin_body_validate">
+            <div class="form-group row">
+                <label class="col-sm-3 control-label">启用标志</label>
+                <div class="col-sm-6">
+                    <select class="form-control m-b selectpicker"
+                            data-style="btn-white" name="enable">
+                        <option value="Y">启用</option>
+                        <option value="N">禁用</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                        启用后，将会对请求体进行格式校验</span>
+                </div>
+                <span class="require_tip">*</span>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 control-label">校验报文</label>
+                <div class="col-sm-6">
+                    <input name="bodyJsonPath" class="form-control"
+                           type="text">
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                        不填或填写$表示校验整个请求体报文，可以用jsonpath指定校验一部分报文</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div name="jsonSchema">
+                    <label class="col-sm-3 control-label">Json Schema</label>
+                    <div class="col-sm-6">
+                    <textarea name="jsonSchema" class="form-control"
+                              placeholder="" rows="4"></textarea>
+                        <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                        请参考实例填写json schema</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div name="test">
+                    <label class="col-sm-3 control-label">测试输入</label>
+                    <div class="col-sm-6">
+                    <textarea name="requestBody" class="form-control"
+                              placeholder="请填入测试请求体" rows="4"></textarea>
+                    </div>
+                    <div class="form-group col-sm-1" name="test">
+                        <p style="text-align: right">
+                            <button type="button" style="margin: 24px" name="testRequestBodyValidate"
+                                    class="btn btn-primary">
+                                校验测试
+                            </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+    bodyVlidateConfig = {
+        init: function (endpointDiv, authType) {
+            var data = {};
+            var tpl = $("#endpoint_body_validate_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").append(html);
+
+            var templateName = "bodyValidate--json";
+            var mode = "application/json";
+            initTextArea(endpointDiv.find("div[name='endpoint_plugin_body_validate']").find("div[name='jsonSchema']"), templateName, mode);
+            initTextArea(endpointDiv.find("div[name='endpoint_plugin_body_validate']").find("div[name='test']"), "", "application/json");
+
+            endpointDiv.find("button[name='testRequestBodyValidate']").click(function () {
+                bodyVlidateConfig.testBodyValidate(endpointDiv, "request");
+            })
+            endpointDiv.find("div[name='endpoint_plugin_body_validate']").find("select").selectpicker('refresh');
+        },
+        remove: function (endpointDiv, authType) {
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").find("div[name='endpoint_plugin_body_validate']").parent().remove();
+        },
+        getFormatResult: function (endpointDiv, pluginList) {
+            var bodyValidateDefinition = {};
+            bodyValidateDefinition.enable = endpointDiv.find("div[name='endpoint_plugin_body_validate']")
+                .find("select[name='enable']").val();
+            bodyValidateDefinition.jsonSchema = endpointDiv.find("div[name='endpoint_plugin_body_validate']")
+                .find("textarea[name='jsonSchema']").val();
+            bodyValidateDefinition.bodyJsonPath = endpointDiv.find("div[name='endpoint_plugin_body_validate']")
+                .find("input[name='bodyJsonPath']").val()
+            var plugin = {};
+            plugin.pluginType = "BodyValidateRequestPlugin";
+            plugin.pluginName = "请求体格式校验插件";
+            plugin.pluginParam = JSON.stringify(bodyValidateDefinition);
+            pluginList.push(plugin);
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, endpointDiv, pluginType) {
+            var bodyValidateDefinition = JSON.parse(pluginParam);
+            var textarea = endpointDiv.find("div[name='endpoint_plugin_body_validate']")
+                .find("textarea[name='jsonSchema']");
+            textarea.val(bodyValidateDefinition.jsonSchema);
+            textarea.change();
+            endpointDiv.find("div[name='endpoint_plugin_body_validate']")
+                .find("select[name='enable']").val(bodyValidateDefinition.enable);
+            endpointDiv.find("div[name='endpoint_plugin_body_validate']")
+                .find("input[name='bodyJsonPath']").val(bodyValidateDefinition.bodyJsonPath);
+        },
+        testBodyValidate: function (endpointDiv, type) {
+            var inputText = endpointDiv.find("div[name='endpoint_plugin_body_validate']").find("textarea[name='requestBody']").val();
+            var jsonSchema = endpointDiv.find("div[name='endpoint_plugin_body_validate']").find("textarea[name='jsonSchema']").val();
+            var bodyJsonPath = endpointDiv.find("div[name='endpoint_plugin_body_validate']").find("input[name='bodyJsonPath']").val();
+            $.ajax({
+                url: pagePrefix + "/bodyvalidate",
+                data: {"inputText": inputText, "jsonschema": jsonSchema, "bodyjsonpath": bodyJsonPath},
+                type: "post",
+                async: false,
+                success: function (data) {
+                    if (ajaxIsSuccess(data)) {
+                        swal(
+                            {
+                                title: "校验成功！",
+                                text: "输入内容校验通过",
+                                type: "success"
+                            });
+                    } else {
+                        swal("转换测试失败！", data.msg, "error");
+                    }
+                }
+            });
+        }
+    }
+</script>

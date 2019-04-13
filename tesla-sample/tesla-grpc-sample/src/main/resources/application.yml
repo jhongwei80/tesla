@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: tesla-grpc
+server:
+  port: 8181
+saluki:
+  grpc:
+    registryAddress: localhost:8500
+    group: tesla
+    version: 1.0.0
+    realityRpcPort: 1201

@@ -1,0 +1,113 @@
+<script type="text/x-handlebars-template" id="endpoint_jarExecute_tmpl">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            后端endpoint插件配置-jar包插件
+        </div>
+        <div class="panel-body" name="endpoint_plugin_jarExecute">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#endpoint_plugin_jarExecute_request_{{endpointDivId}}"
+                           aria-expanded="true">
+                            REQUEST</a>
+                    </li>
+                    <li class="">
+                        <a data-toggle="tab" href="#endpoint_plugin_jarExecute_response_{{endpointDivId}}"
+                           aria-expanded="false">
+                            RESPONSE</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="endpoint_plugin_jarExecute_request_{{endpointDivId}}"
+                         name="endpoint_plugin_jarExecute_request" class="tab-pane active">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">上传jar包</label>
+                                <input type="hidden" name="fileId">
+                                <div class="col-sm-6">
+                                    <input type="file" name="jarFile" class="form-control" accept=".jar">
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 请上传对于规则jar包，
+                        具体打包项目请参考tesla-jarfilter项目 </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="endpoint_plugin_jarExecute_response_{{endpointDivId}}"
+                         name="endpoint_plugin_jarExecute_response" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">上传jar包</label>
+                                <input type="hidden" name="fileId">
+                                <div class="col-sm-6">
+                                    <input type="file" name="jarFile" class="form-control">
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 请上传对于规则jar包，
+                        具体打包项目请参考tesla-jarfilter项目 </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+    jarExecuteConfig = {
+        init: function (endpointDiv, authType) {
+            var data = {};
+            var tpl = $("#endpoint_jarExecute_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").append(html);
+            endpointDiv.find("input[name='jarFile']").prettyFile();
+            endpointDiv.find("div[name='endpoint_plugin_jarExecute_request']").find("input[name='jarFile']").change(function () {
+                var jarName = endpointDiv.attr("id")+"::request::"+endpointDiv.find("div[name='endpoint_plugin_jarExecute_request']")
+                    .find("input[name='jarFile']").val();
+                endpointDiv.find("div[name='endpoint_plugin_jarExecute_request']").find("input[name='fileId']").val(jarName);
+            });
+            endpointDiv.find("div[name='endpoint_plugin_jarExecute_response']").find("input[name='jarFile']").change(function () {
+                var jarName = endpointDiv.attr("id")+"::response::"+endpointDiv.find("div[name='endpoint_plugin_jarExecute_response']")
+                    .find("input[name='jarFile']").val();
+                endpointDiv.find("div[name='endpoint_plugin_jarExecute_response']").find("input[name='fileId']").val(jarName);
+            });
+        },
+        remove: function (endpointDiv, authType) {
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").find("div[name='endpoint_plugin_jarExecute']").parent().remove();
+        },
+        getFormatResult: function (endpointDiv, pluginList) {
+            pluginList = jarExecuteConfig.getFormatResultByType(endpointDiv, pluginList, "request");
+            pluginList = jarExecuteConfig.getFormatResultByType(endpointDiv, pluginList, "response");
+            return pluginList;
+        },
+        getFormatResultByType: function (endpointDiv, pluginList, type) {
+            var plugin = {};
+            if (type == "request") {
+                plugin.pluginType = "JarExecuteRequestPlugin";
+            } else if (type == "response") {
+                plugin.pluginType = "JarExecuteResponsePlugin";
+            }
+            var jarExecuteDefinition = {};
+            jarExecuteDefinition.fileId = endpointDiv.find("div[name='endpoint_plugin_jarExecute_"+type+"']")
+                .find("input[name='fileId']").val();
+            if (jarExecuteDefinition.fileId != "" ) {
+                plugin.pluginName = "执行上传Jar包插件";
+                plugin.pluginParam = JSON.stringify(jarExecuteDefinition);
+                pluginList.push(plugin);
+            }
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, endpointDiv, pluginType) {
+            var jarExecuteDefinition = JSON.parse(pluginParam);
+            var type;
+            if (pluginType == "JarExecuteRequestPlugin") {
+                type = "request"
+            } else if (pluginType == "JarExecuteResponsePlugin") {
+                type = "response"
+            }
+            endpointDiv.find("div[name='endpoint_plugin_jarExecute_"+type+"']")
+                .find("input[name='fileId']").val(jarExecuteDefinition.fileId);
+        }
+    }
+</script>

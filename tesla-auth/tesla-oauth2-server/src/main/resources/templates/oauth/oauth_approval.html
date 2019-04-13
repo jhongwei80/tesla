@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org">
+<head th:include="/common/head :: header"></head>
+
+<body>
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+    <h3>OAuth Approval</h3>
+
+    <p>Do you authorize <span th:text="${param.client_id[0]}"></span> to access your protected resources?</p>
+
+    <form action='/oauth/authorize' id='confirmationForm' method='post'
+          name='confirmationForm'>
+        <input name="client_id" th:unless="${param.client_id == null}" th:value="${param.client_id[0]}" type="hidden"/>
+        <input name="scope" th:unless="${param.scope == null}" th:value="${param.scope[0]}" type="hidden"/>
+        <input name="response_type" th:unless="${param.response_type == null}" th:value="${param.response_type[0]}"
+               type="hidden"/>
+        <input name="redirect_uri" th:unless="${param.redirect_uri == null}" th:value="${param.redirect_uri[0]}"
+               type="hidden"/>
+        <input name="state" th:unless="${param.state == null}" th:value="${param.state[0]}" type="hidden"/>
+        <input name="client_secret" th:unless="${param.client_secret == null}" th:value="${param.client_secret[0]}"
+               type="hidden"/>
+
+        <input name='user_oauth_approval' type='hidden' value='true'/>
+        <label> <input class="btn btn-success" type='submit' value='Authorize'/></label>
+    </form>
+
+    <form action='/oauth/authorize' id='denialForm' method='post' name='denialForm'>
+        <input name="client_id" th:unless="${param.client_id == null}" th:value="${param.client_id[0]}" type="hidden"/>
+        <input name="scope" th:unless="${param.scope == null}" th:value="${param.scope[0]}" type="hidden"/>
+        <input name="response_type" th:unless="${param.response_type == null}" th:value="${param.response_type[0]}"
+               type="hidden"/>
+        <input name="redirect_uri" th:unless="${param.redirect_uri == null}" th:value="${param.redirect_uri[0]}"
+               type="hidden"/>
+        <input name="state" th:unless="${param.state == null}" th:value="${param.state[0]}" type="hidden"/>
+        <input name="client_secret" th:unless="${param.client_secret == null}" th:value="${param.client_secret[0]}"
+               type="hidden"/>
+        <input name='user_oauth_approval' type='hidden' value='false'/>
+        <label><input class="btn btn-warning" type='submit' value='Deny'/></label>
+    </form>
+    <div th:include="/common/foot :: footer"></div>
+</div>
+</body>
+
+</html>

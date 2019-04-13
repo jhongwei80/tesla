@@ -1,0 +1,189 @@
+<script type="text/x-handlebars-template" id="endpoint_bodyTransform_tmpl">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            后端endpoint插件配置-请求报文转换
+        </div>
+        <div class="panel-body" name="endpoint_plugin_bodyTransform">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#endpoint_plugin_bodyTransform_request_{{endpointDivId}}"
+                           aria-expanded="true">
+                            REQUEST</a>
+                    </li>
+                    <li class="">
+                        <a data-toggle="tab" href="#endpoint_plugin_bodyTransform_response_{{endpointDivId}}"
+                           aria-expanded="false">
+                            RESPONSE</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="endpoint_plugin_bodyTransform_request_{{endpointDivId}}"
+                         name="endpoint_plugin_bodyTransform_request" class="tab-pane active">
+                        <div class="panel-body">
+                            <div name="freemarker">
+                                <div class="form-group row">
+                                    <label>freemarker脚本</label>
+                                    <textarea name="ftlTemplate" class="form-control"
+                                              placeholder="freemarker脚本" rows="4"></textarea>
+
+                                </div>
+                            </div>
+                            <div name="test">
+                                <div class="form-group row">
+                                    <div class="form-group col-sm-5">
+                                        <label>测试输入</label>
+                                        <textarea name="requestBody" class="form-control"
+                                                  placeholder="测试用request body，支持json格式" rows="4"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-1"></div>
+                                    <div class="form-group col-sm-5">
+                                        <label>测试输出</label>
+                                        <textarea name="testOutput" class="form-control"
+                                                  placeholder="请填写好模板和测试输入后点击测试，此处会输出转换结果" rows="4"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-1">
+                                        <p style="text-align: right">
+                                            <button type="button" style="margin: 24px" name="testRequestBodyTransform"
+                                                    class="btn btn-primary">
+                                                转换测试
+                                            </button>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="endpoint_plugin_bodyTransform_response_{{endpointDivId}}"
+                         name="endpoint_plugin_bodyTransform_response" class="tab-pane">
+                        <div class="panel-body">
+                            <div name="freemarker">
+                                <div class="form-group row">
+                                    <label>freemarker脚本</label>
+                                    <textarea name="ftlTemplate" class="form-control"
+                                              placeholder="freemarker脚本" rows="4"></textarea>
+
+                                </div>
+                            </div>
+                            <div name="test">
+                                <div class="form-group row">
+                                    <div class="form-group col-sm-5">
+                                        <label>测试输入</label>
+                                        <textarea name="requestBody" class="form-control"
+                                                  placeholder="测试用response body，支持json格式" rows="4"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-1"></div>
+                                    <div class="form-group col-sm-5">
+                                        <label>测试输出</label>
+                                        <textarea name="testOutput" class="form-control"
+                                                  placeholder="请填写好模板和测试输入后点击测试，此处会输出转换结果" rows="4"></textarea>
+                                    </div>
+                                    <div class="form-group col-sm-1">
+                                        <p style="text-align: right">
+                                            <button type="button" style="margin: 24px" name="testResponseBodyTransform"
+                                                    class="btn btn-primary">
+                                                转换测试
+                                            </button>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+    bodyTransformConfig = {
+        init: function (endpointDiv, authType) {
+            var data = {};
+            var tpl = $("#endpoint_bodyTransform_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").append(html);
+            var templateName = "freemarker--ftl";
+            var mode = "freemarker";
+            initTextArea(endpointDiv.find("div[name='endpoint_plugin_bodyTransform_request']").find("div[name='freemarker']"), templateName, mode);
+            initTextArea(endpointDiv.find("div[name='endpoint_plugin_bodyTransform_response']").find("div[name='freemarker']"), templateName, mode);
+            initTextArea(endpointDiv.find("div[name='endpoint_plugin_bodyTransform_request']").find("div[name='test']"), "", "application/json");
+
+            endpointDiv.find("button[name='testRequestBodyTransform']").click(function () {
+                bodyTransformConfig.testTransform(endpointDiv, "request");
+            })
+
+            initTextArea(endpointDiv.find("div[name='endpoint_plugin_bodyTransform_response']").find("div[name='test']"), "", "application/json");
+            endpointDiv.find("button[name='testResponseBodyTransform']").click(function () {
+                bodyTransformConfig.testTransform(endpointDiv, "response");
+            })
+
+        },
+        remove: function (endpointDiv, authType) {
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").find("div[name='endpoint_plugin_bodyTransform']").parent().remove();
+        },
+        getFormatResult: function (endpointDiv, pluginList) {
+            pluginList = bodyTransformConfig.getFormatResultByType(endpointDiv, pluginList, "request");
+            pluginList = bodyTransformConfig.getFormatResultByType(endpointDiv, pluginList, "response");
+            return pluginList;
+        },
+        getFormatResultByType: function (endpointDiv, pluginList, type) {
+            var plugin = {};
+            if (type == "request") {
+                plugin.pluginType = "BodyTransformRequestPlugin";
+            } else if (type == "response") {
+                plugin.pluginType = "BodyTransformResponsePlugin";
+            }
+            var bodyTransformDefinition = {};
+            bodyTransformDefinition.ftlTemplate = endpointDiv.find("div[name='endpoint_plugin_bodyTransform_" + type + "']").find("textarea[name='ftlTemplate']").val();
+            if (bodyTransformDefinition.ftlTemplate != "") {
+                plugin.pluginName = "body转换插件";
+                plugin.pluginParam = JSON.stringify(bodyTransformDefinition);
+                pluginList.push(plugin);
+            }
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, endpointDiv, pluginType) {
+            var bodyTransformDefinition = JSON.parse(pluginParam);
+            var type;
+            if (pluginType == "BodyTransformRequestPlugin") {
+                type = "request";
+            } else if (pluginType == "BodyTransformResponsePlugin") {
+                type = "response";
+            }
+            var textarea = endpointDiv.find("div[name='endpoint_plugin_bodyTransform_" + type + "']")
+                .find("textarea[name='ftlTemplate']");
+            textarea.val(bodyTransformDefinition.ftlTemplate);
+            textarea.change();
+
+        },
+        testTransform: function (endpointDiv, type) {
+            var inputText = endpointDiv.find("div[name='endpoint_plugin_bodyTransform_" + type + "']").find("textarea[name='requestBody']").val();
+            var freemarker = endpointDiv.find("div[name='endpoint_plugin_bodyTransform_" + type + "']").find("textarea[name='ftlTemplate']").val();
+            $.ajax({
+                url: pagePrefix + "/transform",
+                data: {"inputText": inputText, "freemarker": freemarker},
+                type: "post",
+                async: false,
+                success: function (data) {
+                    if (ajaxIsSuccess(data)) {
+                        swal(
+                            {
+                                title: "转换测试成功！",
+                                text: "请检查测试输出是否为预期结果",
+                                type: "success"
+                            }, function (e) {
+                                endpointDiv.find("div[name='endpoint_plugin_bodyTransform_" + type + "']").find("textarea[name='testOutput']").val(data.result);
+                                endpointDiv.find("div[name='endpoint_plugin_bodyTransform_" + type + "']").find("textarea[name='testOutput']").change();
+                            });
+                    } else {
+                        swal("转换测试失败！", data.msg, "error");
+                    }
+                }
+            });
+        }
+    }
+</script>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>灰度规则管理 <small>灰度规则列表</small></h5>
+					<div class="ibox-tools">
+						<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+						<a class="close-link"><i class="fa fa-times"></i></a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div class="btn-group hidden-xs" id="grayToolbar" role="group">
+						<button shiro:hasPermission="gray:add" type="button" class="btn btn-outline btn-default" onclick="add()">
+							<i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+						</button>
+						<button shiro:hasPermission="gray:batchRemove" type="button" class="btn btn-outline btn-default" onclick="batchRemove()">
+							<i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+						</button>
+					</div>
+
+					<table id="grayTable"></table>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<scpript th:include="common/iframeInclud :: footer"></scpript>
+<script type="text/javascript" th:src="@{/js/appjs/gray/gray.js}"></script>
+
+<script type="text/javascript">
+    var s_edit_h = 'hidden';
+    var s_remove_h = 'hidden';
+</script>
+<div shiro:hasPermission="gray:edit">
+	<script type="text/javascript">
+        s_edit_h = '';
+	</script>
+</div>
+<div shiro:hasPermission="gray:remove">
+	<script type="text/javascript">
+        var s_remove_h = '';
+	</script>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<script id="waf_textAreaContent_tmpl" type="text/x-handlebars-template">
+    <div class="panel panel-info">
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">参数配置: </label>
+                <div class="col-sm-6">
+                    <textarea name="pluginParamArea" class="form-control" cols="100" role="20"
+                              style="min-height:200px;"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+    wafTextAreaContentConfig = {
+        init: function (wafDiv, pluginParam, appControlOptions) {
+            var data = {};
+            var tpl = $("#waf_textAreaContent_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            wafDiv.html(html);
+            wafTextAreaContentConfig.refreshDivByParam(pluginParam, wafDiv);
+        },
+        getFormatResult: function (wafDiv) {
+            var paramStr = wafDiv.find("textarea").val();
+            if (paramStr == "") {
+                return paramStr;
+            }
+            var paramList = [];
+            paramStr.split(/\n/).forEach(function (param) {
+                if (param !== "") {
+                    paramList.push(param)
+                }
+            })
+            return JSON.stringify(paramList);
+        },
+        refreshDivByParam: function (pluginParam, wafDiv) {
+            var pluginDefinition = JSON.parse(pluginParam);
+            var mode = "text/plain";
+            var text = "";
+            if (pluginDefinition != null && Object.keys(pluginDefinition).length > 0) {
+                var paramList = pluginDefinition[Object.keys(pluginDefinition)[0]];
+                text = paramList.join("\n");
+            }
+            initTextAreaByContent(wafDiv, text, mode);
+        }
+    }
+</script>

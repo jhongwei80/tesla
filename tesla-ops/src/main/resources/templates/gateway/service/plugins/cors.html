@@ -1,0 +1,119 @@
+<script id="corsTmpl" type="text/x-handlebars-template">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">跨域支持</label>
+        <div class="col-sm-6">
+            <select class="form-control m-b selectpicker"
+                    data-style="btn-white"
+                    id = "enableCors" name="enableCors">
+                <option value="N">关闭</option>
+                <option value="Y">开启</option>
+            </select>
+        </div>
+    </div>
+    <div id="corsContent"></div>
+</script>
+
+
+<script id="corsContentTmpl" type="text/x-handlebars-template">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">允许跨域源</label>
+        <div class="col-sm-6">
+            <input name="allowedOrigins" class="form-control" placeholder="允许的请求源ip，多个可用,分割，全部允许请填*" type="text">
+            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                对应 Access-Control-Allow-Origin 属性 </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">允许cookie跨域</label>
+        <div class="col-sm-6">
+            <select class="form-control m-b selectpicker"
+                    data-style="btn-white"
+                    name="allowCredentials">
+                <option value="Y">是</option>
+                <option value="N">否</option>
+            </select>
+            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                对应 Access-Control-Allow-Credentials 属性 </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">允许跨域方法</label>
+        <div class="col-sm-6">
+            <select class="form-control m-b selectpicker"
+                    data-style="btn-white"
+                    name="allowedRequestMethods" multiple>
+                <option value="POST">POST</option>
+                <option value="GET">GET</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+                <option value="OPTIONS">OPTIONS</option>
+            </select>
+            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                对应 Access-Control-Allow-Methods 属性 </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">允许跨域请求头</label>
+        <div class="col-sm-6">
+            <input name="allowedRequestHeaders" class="form-control" placeholder="允许跨域header，多个可用,分割，全部允许请填*"
+                   type="text">
+            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                Access-Control-Allow-Headers 属性 </span>
+        </div>
+    </div>
+</script>
+
+<script>
+    serviceCorsConfig = {
+        init: function (divObj) {
+            var data = {};
+            var tpl = $("#corsTmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            $(divObj).html(html);
+            $("#enableCors").change(function () {
+                serviceCorsConfig.changeRouteContent();
+            });
+            $("#enableCors").change();
+        },
+        changeRouteContent: function () {
+            if($("#enableCors").val() == "Y"){
+                var data = {};
+                var tpl = $("#corsContentTmpl").html();
+                var template = Handlebars.compile(tpl);
+                var html = template(data);
+                $('#corsContent').html(html);
+                $('#corsContent').find("select").selectpicker('refresh');
+            }else{
+                $('#corsContent').html("");
+            }
+        },
+        getFormatResult: function (divObj, pluginList) {
+            if($("#enableCors").val() == "N"){
+                return pluginList;
+            }
+            var corsDefinition = {};
+            $.each($("#corsContent").find("input,select"), function (i, val) {
+                corsDefinition[$(val).attr("name")] = $(val).val();
+            })
+            var plugin = {};
+            plugin.pluginType = "CorsRequestPlugin";
+            plugin.pluginName = "跨域支持插件";
+            plugin.pluginParam = JSON.stringify(corsDefinition);
+            pluginList.push(plugin);
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, divObj) {
+            if(pluginParam == null){
+                return;
+            }
+            $("#enableCors").selectpicker('val', 'Y');
+            $("#enableCors").change();
+            var corsDefinition = JSON.parse(pluginParam);
+            Object.keys(corsDefinition).forEach(function (key) {
+                $("#corsContent").find("input[name='" + key + "'],select[name='" + key + "']").val(corsDefinition[key]);
+            });
+            divObj.find("select[name=allowedRequestMethods]").selectpicker('render');
+        }
+    }
+</script>

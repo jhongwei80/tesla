@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.tesla.auth.server.oauth.dao.OAuthRSMapper">
+
+
+    <select id="findAccessTokenByTokenId"
+            resultType="io.github.tesla.auth.server.oauth.domian.oauth.AccessToken">
+		select * from oauth_access_token where token_id = #{_parameter}
+    </select>
+    <select id="findClientDetailsByClientIdAndResourceIds"
+            resultType="io.github.tesla.auth.server.oauth.domian.oauth.ClientDetails">
+        select * from oauth_client_details where archived = 0 and client_id = #{clientId}
+        <if test="resourceIds != null and resourceIds != ''">and concat(',',resource_ids,',') like
+            concat('%,',#{resourceIds},',%')
+        </if>
+    </select>
+
+</mapper>

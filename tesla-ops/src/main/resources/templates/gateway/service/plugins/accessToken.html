@@ -1,0 +1,49 @@
+<script type="text/x-handlebars-template" id="endpoint_accessToken_tmpl">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            后端endpoint插件配置-accessToken校验
+        </div>
+        <div class="panel-body" name="endpoint_plugin_accessToken">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">tokenHeader</label>
+                <div class="col-sm-6">
+                    <input name="tokenHeaderKey" class="form-control" placeholder="从哪个header中取token" type="text"></div>
+                <span class="require_tip">*</span>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+    accessTokenConfig = {
+        init: function (endpointDiv, authType) {
+            var data = {};
+            var tpl = $("#endpoint_accessToken_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").append(html);
+        },
+        remove: function (endpointDiv, authType) {
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").find("div[name='endpoint_plugin_accessToken']").parent().remove();
+        },
+        getFormatResult: function (endpointDiv, pluginList) {
+            var accessTokenDefinition = {};
+            $.each(endpointDiv.find("div[name='endpoint_plugin_accessToken']").find("input,select"), function (i, val) {
+                accessTokenDefinition[$(val).attr("name")] = $(val).val();
+            })
+            var plugin = {};
+            plugin.pluginType = "AccessTokenRequestPlugin";
+            plugin.pluginName = "accessToken校验插件";
+            plugin.pluginParam = JSON.stringify(accessTokenDefinition);
+            pluginList.push(plugin);
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, endpointDiv, pluginType) {
+            var accessTokenDefinition = JSON.parse(pluginParam);
+            Object.keys(accessTokenDefinition).forEach(function (key) {
+                endpointDiv.find("div[name='endpoint_plugin_accessToken']").find("input[name='" + key + "'],select[name='" + key + "']").val(accessTokenDefinition[key]);
+            });
+        }
+    }
+</script>

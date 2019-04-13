@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>服务配置管理
+						<small>新增接入系统</small>
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+							<i class="fa fa-chevron-up"></i>
+						</a>
+
+						<a class="close-link">
+							<i class="fa fa-times"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div id="service" class="tab-pane active">
+						<form class="form-horizontal" id="appkeyForm">
+							<div class="panel-body">
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										基础信息
+									</div>
+									<div class="panel-body">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">应用名称</label>
+											<div class="col-sm-6">
+												<input name="appName" class="form-control" type="text">
+											</div>
+											<span class="require_tip">*</span>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Key</label>
+											<div class="col-sm-5">
+												<input name="appKey" id="appKey" class="form-control" type="text">
+												<span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+												接入方需将该key放入header的X-Tesla-AccessKey中，方可被OSG识别</span>
+											</div>
+											<div class="col-sm-1">
+												<span class="button">
+													<button id="btnAppKey" type="button" class="btn btn-primary">随机生成</button>
+												</span>
+											</div>
+											<span class="require_tip">*</span>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">是否启用</label>
+											<div class="col-sm-6">
+												<select class="form-control m-b selectpicker"
+														data-style="btn-white"
+														id="appKeyEnabled"
+														name="appKeyEnabled">
+													<option value="Y">启用</option>
+													<option value="N">禁用</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Key描述</label>
+											<div class="col-sm-6">
+												<input name="appKeyDesc" class="form-control" type="text">
+											</div>
+											<span class="require_tip">*</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										Policy配置
+									</div>
+									<div class="panel-body">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Policy</label>
+											<div class="col-sm-6">
+												<select class="form-control m-b selectpicker"
+														data-style="btn-white"
+														id="policys">
+													<option />
+													<option th:each="policyOption:${policyOptions}" th:value="${policyOption.get('policy_param')}"
+															th:text="${policyOption.get('policy_name')}"/>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										限流配置
+									</div>
+									<div class="panel-body">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">限流开关</label>
+											<div class="col-sm-6">
+												<select class="form-control m-b selectpicker"
+														data-style="btn-white"
+														id="rateLimitEnabled"
+														name="rateLimit.enabled">
+													<option value="N">禁用</option>
+													<option value="Y">启用</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">单位时间频率</label>
+											<div class="col-sm-6">
+												<input name="rateLimit.rate" id="rateLimitRate" class="form-control" type="text">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">单位时间(秒)</label>
+											<div class="col-sm-6">
+												<input name="rateLimit.perSeconds" id="rateLimitPerSeconds" class="form-control" type="text">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										请求配置
+									</div>
+									<div class="panel-body">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">最大请求数</label>
+											<div class="col-sm-6">
+												<input name="quota.maxRequest" id="quotaMaxRequest" class="form-control" type="text">
+												<span class="help-block m-b-none"><i
+														class="fa fa-info-circle"></i> 配置为-1表示不限制 </span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">复位间隔时间</label>
+											<div class="col-sm-6">
+												<input name="quota.interval" id="quotaInterval" class="form-control" type="text">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">复位时间单位</label>
+											<div class="col-sm-6">
+												<select class="form-control m-b selectpicker"
+														data-style="btn-white"
+														id="quotaTimeUtil"
+														name="quota.timeUtil">
+													<option value="3">day</option>
+													<option value="2">hour</option>
+													<option value="1">minute</option>
+													<option value="0">second</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										权限配置
+									</div>
+									<div class="panel-body">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">API控制</label>
+											<div class="col-sm-6">
+												<select class="form-control m-b selectpicker"
+														data-style="btn-white"
+														id="accessControlAccessServices"
+														name="accessServices"
+														data-live-search="true"
+														data-actions-box="true"
+														multiple>
+													<option th:each="appControlOption:${appControlOptions}" th:value="${appControlOption.get('service_id')}"
+															th:text="${appControlOption.get('service_name')}"/>
+												</select>
+												<span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                        							不选择，则表示所有服务都可访问</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button class="btn btn-sm btn-primary" type="submit"> 保 存</button>
+									<button class="btn btn-sm btn-default" type="button" onclick="removeIframeWithSwal()"> 关 闭</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<scpript th:include="common/iframeInclud :: footer"></scpript>
+<script type="text/javascript" th:src="@{/js/appjs/gateway/appkey/add.js}"></script>
+</body>
+</html>

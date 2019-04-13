@@ -1,0 +1,19 @@
+<script>
+    ignoreAuthConfig = {
+        init: function (endpointDiv, authType) {
+
+        },
+        remove: function (endpointDiv, authType) {
+
+        },
+        getFormatResult: function (endpointDiv, pluginList) {
+            var plugin = {};
+            plugin.pluginType = "IgnoreAuthRequestPlugin";
+            plugin.pluginName = "消除访问权限校验插件";
+            pluginList.push(plugin);
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, endpointDiv, pluginType) {
+        }
+    }
+</script>

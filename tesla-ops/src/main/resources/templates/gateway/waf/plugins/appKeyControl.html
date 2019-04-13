@@ -1,0 +1,48 @@
+<script id="waf_appKeyControl_tmpl" type="text/x-handlebars-template">
+    <div class="panel panel-info">
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">过滤API: </label>
+                <div class="col-sm-6">
+                    <select class="form-control m-b selectpicker"
+                            data-style="btn-white"
+                            name="ignoreServices"
+                            data-live-search="true"
+                            data-actions-box="true"
+                            multiple>
+                        {{#each appControlOptions}}
+                        <option value="{{service_id}}" data-prefix="{{service_prefix}}">{{service_name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+    wafAppKeyControlConfig = {
+        init: function (wafDiv, pluginParam, appControlOptions) {
+            var data = {"appControlOptions": appControlOptions};
+            var tpl = $("#waf_appKeyControl_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            wafDiv.html(html);
+            wafAppKeyControlConfig.refreshDivByParam(pluginParam, wafDiv);
+        },
+        getFormatResult: function (wafDiv) {
+            var appKeyControlDefinition = {};
+            var ignoreServices = {};
+            $.each(wafDiv.find("select[name=ignoreServices]  option:selected"), function (i, option) {
+                ignoreServices[$(option).val()] = $(option).data("prefix");
+            })
+            appKeyControlDefinition.ignoreServices = ignoreServices;
+            return JSON.stringify(appKeyControlDefinition);
+        },
+        refreshDivByParam: function (pluginParam, wafDiv) {
+            var appKeyControlDefinition = JSON.parse(pluginParam);
+            wafDiv.find("select[name=ignoreServices]").selectpicker('val', Object.keys(appKeyControlDefinition.ignoreServices));
+        }
+    }
+</script>

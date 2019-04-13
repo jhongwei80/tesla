@@ -1,0 +1,36 @@
+server:
+  session-timeout: 1800
+  tomcat:
+    max-threads: 1000
+    min-spare-threads: 30
+  port: 8080
+  uri-encoding: utf-8
+spring:
+  datasource:
+    #url: ${TESLA_MYSQL_JDBC_URL}
+    #username: ${TESLA_MYSQL_USERNAME}
+    #password: ${TESLA_MYSQL_PASSWORD}
+    url: jdbc:mysql://192.168.99.100:3308/osg_oauth2_server?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: false
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+shiro:
+  # true 启用 TeslaUserDbRealm  false 禁用
+  # 即使禁用，用户相关的表也不可删除，建议开启，并只保留一个或多个admin用户，用于登录系统进行配置操作
+  # LocalDbRealm  specialRealmBean  ladps 必须至少开启一个，否则无法认证
+  useLocalDbRealm: true
+  #specialRealmBean: beanName the bean need extends AuthorizingRealm 需要自己@Bean注册
+  # ladps 按需求配置 不需要可直接删除
+  ladps:
+    - principalSuffix: '@corp.bkjk.com'
+      searchBase: 'ou=BKJK,DC=corp,DC=bkjk,DC=com'
+      url: 'ldap://corp.bkjk.com:389'

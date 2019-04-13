@@ -1,0 +1,55 @@
+<script type="text/x-handlebars-template" id="endpoint_cacheResult_tmpl">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            后端endpoint插件配置-缓存结果插件
+        </div>
+        <div class="panel-body" name="endpoint_plugin_cacheResult">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">缓存超时时间(秒)</label>
+                <div class="col-sm-6">
+                    <input name="expireSecond" class="form-control" oninput="value=value.replace(/[^\d]/g,'')"
+                           type="text">
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                        0表示无失效限制</span>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                        缓存以url和http method为key,仅建议GET请求时，且http header中无自定义信息时使用</span>
+                </div>
+                <span class="require_tip">*</span>
+
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+    cacheResultConfig = {
+        init: function (endpointDiv, authType) {
+            var data = {};
+            var tpl = $("#endpoint_cacheResult_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").append(html);
+        },
+        remove: function (endpointDiv, authType) {
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").find("div[name='endpoint_plugin_cacheResult']").parent().remove();
+        },
+        getFormatResult: function (endpointDiv, pluginList) {
+            var cacheResultDefinition = {};
+            cacheResultDefinition.expireSecond = endpointDiv.find("div[name='endpoint_plugin_cacheResult']")
+                .find("input[name='expireSecond']").val();
+            var plugin = {};
+            plugin.pluginType = "CacheResultPlugin";
+            plugin.pluginName = "缓存结果插件";
+            plugin.pluginParam = JSON.stringify(cacheResultDefinition);
+            pluginList.push(plugin);
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, endpointDiv, pluginType) {
+            var cacheResultDefinition = JSON.parse(pluginParam);
+            Object.keys(cacheResultDefinition).forEach(function (key) {
+                endpointDiv.find("div[name='endpoint_plugin_cacheResult']").find("input[name='" + key + "'],select[name='" + key + "']").val(cacheResultDefinition[key]);
+            });
+        }
+    }
+</script>

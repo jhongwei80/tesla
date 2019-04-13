@@ -1,0 +1,8 @@
+syntax = "proto3";
+option java_package = "io.github.tesla.grpc.user";
+option java_outer_classname = "UserProto";
+package io.github.tesla.grpc.user;
+import "user/user.proto";
+service UserService {
+    rpc sayHello (io.github.tesla.grpc.user.UserRequest) returns (io.github.tesla.grpc.user.UserResponse) {}
+}

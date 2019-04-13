@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.tesla.ops.system.dao.AuthzUserDao">
+
+
+    <select id="findByUserId" resultType="io.github.tesla.ops.system.domain.ShiroUsersDO">
+		select u.user_id,u.username,u.password from sys_user u where u.user_id = #{userId}
+	</select>
+
+    <select id="findByUserNamed" resultType="io.github.tesla.ops.system.domain.ShiroUsersDO">
+		select u.user_id,u.username,u.password,u.status from sys_user u where u.username = #{userName}
+	</select>
+    <select id="findRoleByUserId" resultType="String">
+		select role.role_sign from sys_role role left join sys_user_role urole
+		on role.role_id = urole.role_id where urole.user_id = #{userId}
+	</select>
+    <select id="findPermissonByUserId" resultType="String">
+		select permlist.perms from
+                (select distinct m.perms from sys_menu m
+                left join sys_role_menu rm on m.menu_id = rm.menu_id
+                left join sys_user_role ur on rm.role_id = ur.role_id where ur.user_id = #{userId} )
+                as permlist  where permlist.perms is not null
+	</select>
+
+</mapper>

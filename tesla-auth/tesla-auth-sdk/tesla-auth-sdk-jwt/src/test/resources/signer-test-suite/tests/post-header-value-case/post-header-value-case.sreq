@@ -1,0 +1,5 @@
+POST / HTTP/1.1
+Host:example.amazonaws.com
+My-Header1:VALUE1
+X-Ke-Date:20150830T123600Z
+Authorization: BKJK-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/bkjk_request, SignedHeaders=host;my-header1;x-ke-date, Signature=f2f8bf58e4193e037cff7d01cdf46ef0e1d80515034414b26c02b548b245bd1c

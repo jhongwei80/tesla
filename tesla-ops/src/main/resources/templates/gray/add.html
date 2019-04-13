@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>添加灰度计划</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+						<a class="close-link"><i class="fa fa-times"></i></a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<form class="form-horizontal m-t" id="garyForm">
+						<div class="form-group">
+							<label class="col-sm-3 control-label">计划名称：</label>
+							<div class="col-sm-8">
+								<input id="id" name="id" type="hidden" >
+								<input id="enable" name="enable" type="hidden" >
+								<input id="planName" name="planName" class="form-control" type="text" placeholder="请输入计划名称">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">计划描述：</label>
+							<div class="col-sm-8">
+								<input id="planDesc" name="planDesc" class="form-control" type="text" placeholder="请输入计划描述">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">计划负责人：</label>
+							<div class="col-sm-8">
+								<input id="planOwner" name="planOwner" class="form-control" type="text" placeholder="请输入计划负责人">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">有效时间：</label>
+							<div class="col-sm-4">
+								<input id="effectTime" name="effectTime" placeholder="请选择起始日期" class="form-control" type="text">
+							</div>
+							<div class="col-sm-4">
+								<input id="expireTime" name="expireTime" placeholder="请选择结束日期" class="form-control" type="text">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-8 col-sm-offset-3">
+								<button class="btn btn-primary" type="submit" id = "submit">保存计划基本信息</button>
+								<button class="btn btn-primary" type="button" id ="addGrayRule">新增灰度规则</button>
+								<button class="btn btn-default" type="button" id = "close" onclick="removeIframeWithSwal()">关闭</button>
+							</div>
+						</div>
+					</form>
+					<div class="tabs-container">
+						<ul class="nav nav-tabs">
+						</ul>
+						<div class="tab-content" id="filtersDiv">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<scpript th:include="common/iframeInclud :: footer"></scpript>
+
+<script type="text/javascript" th:src="@{/js/appjs/gray/add.js}"></script>
+</body>
+</html>
+
+<script id="grayRuleSection" type="type/x-jquery-tmpl">
+<div class="tab-pane active" id="grayDiv_{{= nextTab}}}">
+								<div class="panel-body">
+									<div class="col-sm-12">
+										<div class="col-sm-8">
+				<span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+						灰度规则
+				</span>
+										</div>
+
+										<div class="col-sm-4 " style="text-align:right">
+											<input name="grayRule"
+												   id="grayRule" type="hidden">
+											<button class="btn btn-primary" type="button"
+													onClick="addSingleGrayRule({{= nextTab}})">保存规则
+											</button>
+											<button class="btn btn-default" type="button"
+													onClick="delSingleGrayRule({{= nextTab}})">删除
+											</button>
+										</div>
+									</div>
+									<form class="form-horizontal m-t" id="grayRuleForm_{{= nextTab}}">
+										<input id="grayPolicyVOS[{{= nextTab}}].id" name="grayPolicyVOS[{{= nextTab}}].id" class="form-control" type="hidden">
+										<div class="form-group">
+											<div class="col-sm-2"></div>
+											<label class="col-sm-1 control-label">服务消费方：</label>
+											<div class="col-sm-7">
+												<select id="grayPolicyVOS[{{= nextTab}}].consumerService" name="grayPolicyVOS[{{= nextTab}}].consumerService"
+												class="form-control m-b selectpicker" data-style="btn-white" data-live-search="true"></select>
+											</div>
+
+										</div>
+										<div class="form-group">
+											<div class="col-sm-2"></div>
+											<label class="col-sm-1 control-label">服务提供方：</label>
+											<div class="col-sm-7">
+												<select id="grayPolicyVOS[{{= nextTab}}].providerService" name="grayPolicyVOS[{{= nextTab}}].providerService"
+												class="form-control m-b selectpicker" data-style="btn-white" data-live-search="true"></select>
+											</div>
+
+										</div>
+										<div name="policy[{{= nextTab}}]">
+											<div class="form-group">
+												<div class="col-sm-3"></div>
+												<div class="col-sm-7">
+													<span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+														以下灰度策略中，当选择为请求头或请求参数时，key请填写header或param的key，当选择为请求体时，
+														仅支持json格式的请求体，key请填写jsonpath，透传选项仅对请求头生效
+													</span>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="col-sm-2"></div>
+												<label class="col-sm-1 control-label">灰度策略：</label>
+												<div class="col-sm-1">
+													<input id="grayPolicyVOS[{{= nextTab}}].maxIndex"
+														   name="grayPolicyVOS[{{= nextTab}}].maxIndex" value="0"
+														   class="form-control" type="hidden">
+
+													<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyParamConditionVOS[0].id"
+														   name="grayPolicyVOS[{{= nextTab}}].grayPolicyParamConditionVOS[0].id"
+														   class="form-control" type="hidden">
+
+													<select class="form-control m-b selectpicker" data-style="btn-white"
+															id="grayPolicyVOS[{{= nextTab}}].grayPolicyParamConditionVOS[0].paramKind"
+															name="grayPolicyVOS[{{= nextTab}}].grayPolicyParamConditionVOS[0].paramKind">
+														<option value="HTTP_HEADER">请求头</option>
+														<option value="HTTP_PARAM">请求参数</option>
+														<option value="HTTP_BODY">请求体</option>
+													</select>
+												</div>
+												<label class="col-sm-1 control-label">如果含有：</label>
+												<div class="col-sm-2">
+													<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyParamConditionVOS[0].paramKey"
+														   name="grayPolicyVOS[{{= nextTab}}].grayPolicyParamConditionVOS[0].paramKey"
+														   class="form-control" type="text" placeholder="请输入key">
+												</div>
+												<div class="col-sm-2">
+													<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyParamConditionVOS[0].paramValue"
+														   name="grayPolicyVOS[{{= nextTab}}].grayPolicyParamConditionVOS[0].paramValue"
+														   class="form-control" type="text" placeholder="请输入value">
+												</div>
+												<div class="col-sm-1" style="text-align:right;top:7px">
+													<input type="checkbox" value="Y" id="grayPolicyVOS[{{= nextTab}}].grayPolicyParamConditionVOS[0].transmit"
+                                        				name = "grayPolicyVOS[{{= nextTab}}].grayPolicyParamConditionVOS[0].transmit">透传</label>
+
+													<a href="javascript:void(0)" mce_href="#" title="新增"
+													   onclick="fnClickAddRow({{= nextTab}})"> <i
+															class="glyphicon glyphicon-plus"></i></a>
+												</div>
+
+											</div>
+
+										</div>
+										<div class="form-group">
+											<div class="col-sm-2"></div>
+											<label class="col-sm-1 control-label">路由结果：</label>
+											<label class="col-sm-1 control-label">节点中</label>
+											<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[0].id" name="grayPolicyVOS[0].grayPolicyParamConditionVOS[0].id" class="form-control" type="hidden">
+
+												<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[0].paramKind"
+													   name="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[0].paramKind" class="form-control" value="NODE" type="hidden">
+
+
+											<label class="col-sm-1 control-label">GROUP：</label>
+											<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[0].paramKey"
+													name="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[0].paramKey"
+													   class="form-control" type="hidden" value="GROUP">
+											<div class="col-sm-4">
+												<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[0].paramValue"
+													   name="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[0].paramValue"
+													   class="form-control" type="text" placeholder="请输入GROUP">
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="col-sm-3"></div>
+											<label class="col-sm-1 control-label">节点中</label>
+											<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[1].id" name="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[1].id" class="form-control" type="hidden">
+											<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[1].paramKind"
+													   name="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[1].paramKind" class="form-control" value="NODE" type="hidden">
+											<label class="col-sm-1 control-label">VERSION：</label>
+											<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[1].paramKey"
+												   name="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[1].paramKey"
+												   class="form-control" type="hidden" value="VERSION">
+											<div class="col-sm-4">
+												<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[1].paramValue"
+													   name="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[1].paramValue"
+													   class="form-control" type="text" placeholder="请输入VERSION">
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-3"></div>
+											<label class="col-sm-1 control-label">节点中</label>
+											<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[2].id" name="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[2].id" class="form-control" type="hidden">
+											<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[2].paramKind"
+													   name="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[2].paramKind" class="form-control" value="NODE" type="hidden">
+											<label class="col-sm-1 control-label">bkjkgray：</label>
+											<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[2].paramKey"
+												   name="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[2].paramKey"
+												   class="form-control" type="hidden" value="bkjkgray">
+											<div class="col-sm-4">
+												<input id="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[2].paramValue"
+													   name="grayPolicyVOS[{{= nextTab}}].grayPolicyNodeConditionVOS[2].paramValue"
+													   class="form-control" type="text" placeholder="请输入bkjkgray">
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+</script>
+
+
+<script id="policySection" type="type/x-jquery-tmpl">
+<div class="form-group" >
+											<div class="col-sm-3"></div>
+											<div class="col-sm-1">
+												<input id="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].planId"
+													   name="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].planId"
+													   class="form-control" type="hidden">
+												<input id="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].id"
+													   name="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].id"
+													   class="form-control" type="hidden">
+												<input id="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].policyId"
+													   name="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].policyId"
+													   class="form-control" type="hidden">
+												<select class="form-control m-b selectpicker" data-style="btn-white"
+														id="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].paramKind"
+														name="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].paramKind">
+													<option value="HTTP_HEADER">请求头</option>
+													<option value="HTTP_PARAM">请求参数</option>
+													<option value="HTTP_BODY">请求体</option>
+												</select>
+											</div>
+											<label class="col-sm-1 control-label">如果含有：</label>
+											<div class="col-sm-2">
+												<input id="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].paramKey"
+													   name="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].paramKey"
+													   class="form-control" type="text" placeholder="请输入key">
+											</div>
+											<div class="col-sm-2">
+												<input id="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].paramValue"
+													   name="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].paramValue"
+													   class="form-control" type="text" placeholder="请输入value">
+											</div>
+											<div class="col-sm-1" style="text-align:right;top:7px">
+												<input type="checkbox" value="Y" id="grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].transmit"
+                                        				name = "grayPolicyVOS[{{= policyIndex}}].grayPolicyParamConditionVOS[{{= policyRuleIndex}}].transmit">透传</label>
+												<a href="javascript:void(0)" title="删除" mce_href="#"
+												   onclick="delrow(this)"> <i
+														class="glyphicon glyphicon-remove"></i></a>
+											</div>
+										</div>		
+
+</script>
+
+
+<script id="dynamicsTabli" type="type/x-jquery-tmpl">
+<li><a href="#grayDiv_{{= nextTab}}" data-toggle="tab">{{= nextTab}}-灰度规则</a></li>
+
+</script>
+<script id="dynamicsTabContent" type="type/x-jquery-tmpl">
+<div class="tab-pane" id="grayDiv_{{= nextTab}}"></div>
+
+</script>
+
+

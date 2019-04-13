@@ -1,0 +1,171 @@
+<!--auth config -->
+
+<script id="authTypeTmpl" type="text/x-handlebars-template">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">鉴权类型</label>
+        <div class="col-sm-6">
+            <select class="form-control m-b selectpicker"
+                    data-style="btn-white"
+                    id="authType" name="authType">
+                <option value="open" data-authtmpl="openTmpl">开放</option>
+                <option value="standardOauth" data-authtmpl="standardOauthTmpl">标准-OAUTH2</option>
+                <option value="jwt" data-authtmpl="jwtTmpl">JWT</option>
+            </select>
+        </div>
+    </div>
+    <div id="authConent"></div>
+</script>
+
+
+<script type="text/x-handlebars-template" id="openTmpl">
+</script>
+
+<script type="text/x-handlebars-template" id="specialTmpl">
+</script>
+
+<script type="text/x-handlebars-template" id="oauthTmpl">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">tokenHeader</label>
+        <div class="col-sm-6">
+            <input name="tokenHeaderKey" class="form-control" placeholder="从哪个header中取token" type="text">
+            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                如果需要配置多个header，请用英文逗号,分割，不建议多个header </span>
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">是否解析claims</label>
+        <div class="col-sm-6">
+            <select class="form-control m-b selectpicker"
+                    data-style="btn-white" name="parseClaims">
+                <option value="Y">解析</option>
+                <option value="N">不解析</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">claimsHeader</label>
+        <div class="col-sm-6">
+            <input name="claimsHeaderKey" class="form-control" placeholder="解析到的claims放入哪个header" type="text">
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="standardOauthTmpl">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">认证服务器地址</label>
+        <div class="col-sm-6">
+            <input name="oauthServerUrl" class="form-control" type="text">
+            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                最终会调用认证服务器的 /oauth/check_token 接口进行验证</span>
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">tokenHeader</label>
+        <div class="col-sm-6">
+            <input name="tokenHeader" class="form-control" type="text">
+            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                从哪个header中取token，例如 Authorization </span>
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="jwtTmpl">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">issuer</label>
+        <div class="col-sm-6">
+            <input name="issuer" class="form-control" placeholder="可填为BKJK" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">验证秘钥</label>
+        <div class="col-sm-6">
+            <input name="secretKey" class="form-control" placeholder="secretKey" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">是否解析claims</label>
+        <div class="col-sm-6">
+            <select class="form-control m-b selectpicker"
+                    data-style="btn-white" name="parseClaims">
+                <option value="Y">解析</option>
+                <option value="N">不解析</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">claimsHeader</label>
+        <div class="col-sm-6">
+            <input name="claimsHeaderKey" class="form-control" placeholder="解析到的claims放入哪个header" type="text">
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="accesstokenTmpl">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">tokenHeader</label>
+        <div class="col-sm-6">
+            <input name="tokenHeaderKey" class="form-control" placeholder="从哪个header中取token" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+</script>
+
+
+<script>
+    authConfig = {
+        init: function (divObj) {
+            var data = {};
+            var tpl = $("#authTypeTmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            $(divObj).html(html);
+            $("#authType").change(function () {
+                authConfig.changeAuthContent()
+            });
+            $("#authType").change();
+        },
+        getFormatResult: function (divObj, pluginList) {
+            var authDefinition = {};
+            authDefinition.authType = $("#authType").val();
+            if (authDefinition.authType == "open") {
+                authDefinition.enabled = "N";
+                return pluginList;
+            } else {
+                authDefinition.enabled = "Y"
+            }
+            var authParam = {};
+            $.each($(divObj).find("input,select"), function (i, val) {
+                authParam[$(val).attr("name")] = $(val).val();
+            })
+            authDefinition.authParamJson = JSON.stringify(authParam);
+            var plugin = {};
+            plugin.pluginType = "AuthRequestPlugin";
+            plugin.pluginName = "权限验证插件";
+            plugin.pluginParam = JSON.stringify(authDefinition);
+            pluginList.push(plugin);
+            return pluginList;
+        },
+        changeAuthContent: function () {
+            var data = {};
+            var tpl = $("#" + $("#authType").find("option:selected").data("authtmpl")).html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            $('#authConent').html(html);
+            $("[name='parseClaims']").selectpicker('refresh');
+        },
+        refreshDivByParam: function (pluginParam, divObj) {
+            var authDefinition = JSON.parse(pluginParam);
+            $('#authType').selectpicker('val', authDefinition.authType);
+            var authParam = JSON.parse(authDefinition.authParamJson);
+            Object.keys(authParam).forEach(function (key) {
+                $(divObj).find("input[name='" + key + "'],select[name='" + key + "']").val(authParam[key]);
+            });
+        }
+    }
+</script>

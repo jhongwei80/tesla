@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>新增部门</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+							<i class="fa fa-chevron-up"></i>
+						</a>
+
+						<a class="close-link">
+							<i class="fa fa-times"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<form class="form-horizontal m-t" id="deptForm">
+						<div class="form-group">
+							<label class="col-sm-3 control-label">上级部门：</label>
+							<div class="col-sm-8">
+								<input id="parentId" name="parentId" class="form-control  hidden" type="text" th:value="${pId}" >
+								<input id="pName" name="pName" class="form-control" th:value="${pName}" type="text" readonly>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">部门名：</label>
+							<div class="col-sm-8">
+								<input id="name" name="name" class="form-control" type="text">
+								<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 填入部门名称</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">排序：</label>
+							<div class="col-sm-8">
+								<input id="orderNum" name="orderNum" class="form-control" type="text">
+								<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 请填入大于0的正整数</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">状态：</label>
+							<div class="col-sm-8">
+								<select class="form-control m-b selectpicker" id="delFlag" name="delFlag" data-style="btn-white">
+									<option value="1">启用</option>
+									<option value="0">禁用</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-8 col-sm-offset-3">
+								<button class="btn btn-primary" type="submit">提交</button>
+								<button class="btn btn-default" type="button" id = "close" onclick="removeIframeWithSwal()">关闭</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<scpript th:include="common/iframeInclud :: footer"></scpript>
+<script type="text/javascript" th:src="@{/js/appjs/system/dept/add.js}"></script>
+</body>
+</html>
+
+
+
+
+
+

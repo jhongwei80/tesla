@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>接入系统配置管理
+						<small>编辑Policy配置</small>
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+							<i class="fa fa-chevron-up"></i>
+						</a>
+
+						<a class="close-link">
+							<i class="fa fa-times"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div id="service" class="tab-pane active">
+						<form class="form-horizontal" id="policyForm">
+							<div class="panel-body">
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										基础信息
+									</div>
+									<div class="panel-body">
+										<div class="form-group">
+											<input name="id" id = "id" type="hidden"  th:value="${policyVo.id}" />
+											<label class="col-sm-3 control-label">Policy名称</label>
+											<div class="col-sm-6">
+												<input name="policyName" class="form-control" type="text" th:value="${policyVo.policyName}">
+											</div>
+											<span class="require_tip">*</span>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Policy描述</label>
+											<div class="col-sm-6">
+												<input name="policyDesc" class="form-control" type="text" th:value="${policyVo.policyDesc}">
+											</div>
+											<span class="require_tip">*</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										限流配置
+									</div>
+									<div class="panel-body">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">限流开关</label>
+											<div class="col-sm-6">
+												<select class="form-control m-b selectpicker"
+														data-style="btn-white"
+														id="policyParamVo.rateLimit.enabled"
+														name="policyParamVo.rateLimit.enabled">
+													<option value="N" th:selected="${policyVo.policyParamVo.rateLimit.enabled=='N'}">禁用</option>
+													<option value="Y" th:selected="${policyVo.policyParamVo.rateLimit.enabled=='Y'}">启用</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">单位时间频率</label>
+											<div class="col-sm-6">
+												<input name="policyParamVo.rateLimit.rate" class="form-control" type="text" th:value="${policyVo.policyParamVo.rateLimit.rate}">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">单位时间(秒)</label>
+											<div class="col-sm-6">
+												<input name="policyParamVo.rateLimit.perSeconds" class="form-control" type="text" th:value="${policyVo.policyParamVo.rateLimit.perSeconds}">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										请求配置
+									</div>
+									<div class="panel-body">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">最大请求数</label>
+											<div class="col-sm-6">
+												<input name="policyParamVo.quota.maxRequest" id="policyParamVo.quota.maxRequest" class="form-control" type="text"  th:value="${policyVo.policyParamVo.quota.maxRequest}">
+												<span class="help-block m-b-none"><i
+														class="fa fa-info-circle"></i> 配置为-1表示不限制 </span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">复位间隔时间</label>
+											<div class="col-sm-6">
+												<input name="policyParamVo.quota.interval" class="form-control" type="text" th:value="${policyVo.policyParamVo.quota.interval}">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">复位时间单位</label>
+											<div class="col-sm-6">
+												<select class="form-control m-b selectpicker"
+														data-style="btn-white"
+														id="policyParamVo.quota.timeUtil"
+														name="policyParamVo.quota.timeUtil">
+													<option value="3" th:selected="${3== policyVo.policyParamVo.quota.timeUtil}">day</option>
+													<option value="2" th:selected="${2== policyVo.policyParamVo.quota.timeUtil}">hour</option>
+													<option value="1" th:selected="${1== policyVo.policyParamVo.quota.timeUtil}">minute</option>
+													<option value="0" th:selected="${0== policyVo.policyParamVo.quota.timeUtil}">second</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										权限配置
+									</div>
+									<div class="panel-body">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">允许访问服务</label>
+											<div class="col-sm-6">
+												<select class="form-control m-b selectpicker"
+														data-style="btn-white"
+														id="policyParamVo.accessControls"
+														name="policyParamVo.accessControls"
+														data-live-search="true"
+														data-actions-box="true"
+														multiple>
+													<option th:each="appControl:${appControlSelect}" th:value="${appControl.get('service_id')}"
+															th:text="${appControl.get('service_name')}" th:selected="${policyVo.policyParamVo.accessControls.contains(appControl.get('service_id'))}"/>
+												</select>
+												<span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                        							不选择，则表示所有服务都可访问</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button class="btn btn-sm btn-primary" type="submit"> 保 存</button>
+									<button class="btn btn-sm btn-default" type="button" onclick="removeIframeWithSwal()"> 关 闭</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<scpript th:include="common/iframeInclud :: footer"></scpript>
+<script type="text/javascript" th:src="@{/js/appjs/gateway/policy/edit.js}"></script>
+</body>
+</html>

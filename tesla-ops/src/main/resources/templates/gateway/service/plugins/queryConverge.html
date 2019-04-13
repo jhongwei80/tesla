@@ -1,0 +1,145 @@
+<script id="endpoint_queryConverge_tmpl" type="text/x-handlebars-template">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            后端endpoint插件配置-聚合查询
+        </div>
+        <div class="panel-body" name="endpoint_plugin_queryConverge">
+            <div class="row">
+                <div class="form-group col-sm-1">
+                </div>
+                <div class="form-group col-sm-1">
+                    <button type="button" name="addRouterInfo"
+                            class="btn btn-primary">
+                        添加查询配置
+                    </button>
+                </div>
+                <div class="form-group col-sm-1">
+                </div>
+                <div class="form-group col-sm-8">
+                    <label>
+                        该插件可实现调用方一次查询，聚合多个后端接口数据的效果.
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="endpoint_queryConvergeContent_tmpl">
+    <div class="row" name="queryConvergeContent">
+        <input type="hidden" name="transformPath">
+        <input type="hidden" name="servicePrefix">
+        <div class="form-group col-sm-1" style="text-align: center">
+            <label>&nbsp;&nbsp;&nbsp;</label>
+            <button class="btn btn-warning btn-circle" style="margin-top: 20px"
+                    type="button" onclick="queryConvergeConfig.removeRouterInfo(this)"><i class="fa fa-times"></i>
+            </button>
+        </div>
+        <div class="form-group col-sm-3">
+            <label>后端服务</label>
+            <select class="form-control m-b selectpicker"
+                    data-style="btn-white" data-live-search="true"
+                    name="serviceId">
+            </select>
+        </div>
+        <div class="form-group col-sm-1">
+            <span class="require_tip" style="padding: 24px">*</span>
+        </div>
+        <div class="form-group col-sm-3">
+            <label>请求路径</label>
+            <input name="patternPath" class="form-control" placeholder="支持占位符，如/service/#{1}"
+                   type="text">
+        </div>
+        <div class="form-group col-sm-1">
+            <span class="require_tip" style="padding: 24px">*</span>
+        </div>
+        <div class="form-group col-sm-3">
+            <label>聚合标签</label>
+            <input name="convergeTag" class="form-control" placeholder="可不配，有配置需唯一"
+                   type="text">
+        </div>
+        <div class="form-group col-sm-1">
+            <span class="require_tip" style="padding: 24px">*</span>
+        </div>
+    </div>
+</script>
+
+<script>
+    queryConvergeConfig = {
+        init: function (endpointDiv, authType) {
+            var data = {};
+            var tpl = $("#endpoint_queryConverge_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").append(html);
+            var servicesMap = queryConvergeConfig.getServiceMap();
+            endpointDiv.find("div[name='endpoint_plugin_queryConverge']").find("button[name='addRouterInfo']").click(function () {
+                var data = {};
+                var tpl = $("#endpoint_queryConvergeContent_tmpl").html();
+                var template = Handlebars.compile(tpl);
+                var html = template(data);
+                endpointDiv.find("div[name='endpoint_plugin_queryConverge']").append(html);
+                var serviceSelect = endpointDiv.find("div[name='endpoint_plugin_queryConverge']").find("div[name='queryConvergeContent']").last().find("select[name='serviceId']");
+                Object.keys(servicesMap).forEach(function (key) {
+                    serviceSelect.append("<option value='" + key + "'>" + servicesMap[key] + "</option>");
+                });
+                serviceSelect.selectpicker('render');
+            })
+        },
+        remove: function (endpointDiv, authType) {
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").find("div[name='endpoint_plugin_queryConverge']").parent().remove();
+        },
+        getFormatResult: function (endpointDiv, pluginList) {
+            var queryConvergeDefinition = {};
+            var routerList = [];
+            endpointDiv.find("div[name='endpoint_plugin_queryConverge']").find("div[name='queryConvergeContent']").each(function () {
+                var routerInfo = {};
+                $.each($(this).find("input,select"), function (i, val) {
+                    routerInfo[$(val).attr("name")] = $(val).val();
+                });
+                routerList.push(routerInfo);
+            });
+            queryConvergeDefinition.routerList = routerList;
+
+            var plugin = {};
+            plugin.pluginType = "QueryConvergeRequestPlugin";
+            plugin.pluginName = "查询聚合插件";
+            plugin.pluginParam = JSON.stringify(queryConvergeDefinition);
+            pluginList.push(plugin);
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, endpointDiv, pluginType) {
+            var queryConvergeDefinition = JSON.parse(pluginParam);
+            var routerList = queryConvergeDefinition.routerList;
+            if (routerList != undefined) {
+                routerList.forEach(function (routerInfo) {
+                    endpointDiv.find("div[name='endpoint_plugin_queryConverge']").find("button[name='addRouterInfo']").click();
+                    var addDiv = endpointDiv.find("div[name='endpoint_plugin_queryConverge']").find("div[name='queryConvergeContent']").last();
+                    Object.keys(routerInfo).forEach(function (key) {
+                        addDiv.find("input[name='" + key + "'],select[name='" + key + "']").val(routerInfo[key]);
+                    });
+                });
+            }
+            endpointDiv.find("select").selectpicker('render');
+        }, getServiceMap: function () {
+
+            var serviceMap;
+            $.ajax({
+                url: "/gateway/service/getServiceMap",
+                type: "get",
+                async: false,
+                success: function (data) {
+                    if (ajaxIsSuccess(data)) {
+                        serviceMap = data.serviceMap;
+                    } else {
+                        swal("获取已有服务列表失败，请联系管理员！", data.msg, "error");
+                    }
+                }
+            });
+            return serviceMap;
+        },
+        removeRouterInfo: function (obj) {
+            $(obj).parent().parent().remove();
+        }
+    }
+</script>

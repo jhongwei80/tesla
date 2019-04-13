@@ -1,0 +1,1 @@
+BKJK-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/service/bkjk_request, SignedHeaders=host;my-header1;x-ke-date, Signature=c399604d1ecb6e3d52e5274169319d7486095ca1fa7779486b2748f3c34c273e

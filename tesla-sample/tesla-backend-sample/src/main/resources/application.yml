@@ -1,0 +1,20 @@
+server:
+  port: 8902
+  servlet:
+    context-path: /order-service
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER}
+dubbo:
+  registry:
+    address: zookeeper://127.0.0.1:${embedded.zookeeper.port}
+    file: ${user.home}/dubbo-cache/${spring.application.name}/dubbo.cache
+  protocol:
+    port: -1
+    name: dubbo
+  scan:
+    base-packages: io.github.tesla.backend.dubbo.user
+embedded:
+  zookeeper:
+    port: 2181

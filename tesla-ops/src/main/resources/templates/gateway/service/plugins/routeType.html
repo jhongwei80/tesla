@@ -1,0 +1,157 @@
+<script id="routeTypeTmpl" type="text/x-handlebars-template">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">路由类型</label>
+        <div class="col-sm-6">
+            <select class="form-control m-b selectpicker"
+                    data-style="btn-white"
+                    id="routeType" name="routeType">
+                <option value="direct" data-routertmpl="directTmpl">直接路由</option>
+                <option value="springcloud" data-routertmpl="springcloudTmpl">springCloud</option>
+                <option value="dubbo" data-routertmpl="dubboTmpl">Dubbo</option>
+                <option value="grpc" data-routertmpl="grpcTmpl">gRpc</option>
+            </select>
+        </div>
+    </div>
+    <div id="routeConent"></div>
+</script>
+
+<script type="text/x-handlebars-template" id="directTmpl">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">目标地址</label>
+        <div class="col-sm-6">
+            <input name="targetHostPort" class="form-control"  type="text">
+            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                 eg. backend-server-host:8080 默认端口80或443可不填端口 </span>
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">地址前缀</label>
+        <div class="col-sm-6">
+            <input name="targetPrefix" class="form-control" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">HTTPS</label>
+        <div class="col-sm-6">
+            <select class="form-control m-b selectpicker"
+                    data-style="btn-white" name="enableSSL">
+                <option value="N">否</option>
+                <option value="Y">是</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">自签证书</label>
+        <div class="col-sm-6">
+            <input type="hidden" name="selfSignCrtFileId">
+            <input type="file" name="selfSignCrtFile" class="form-control" accept=".crt">
+            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                如果服务器的证书为自签证书，请上传crt格式证书 </span>
+        </div>
+    </div>
+    <input name="servicePrefix" class="form-control" type="hidden">
+</script>
+
+<script type="text/x-handlebars-template" id="springcloudTmpl">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">服务ID</label>
+        <div class="col-sm-6">
+            <input placeholder="SpringCloud服务ID" type="text"
+                   name="serviceName"
+                   class="form-control">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">服务Group</label>
+        <div class="col-sm-6">
+            <input placeholder="SpringCloud服务组别" type="text"
+                   name="group"
+                   class="form-control">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">服务Version</label>
+        <div class="col-sm-6">
+            <input placeholder="SpringCloud服务版本" type="text"
+                   name="version"
+                   class="form-control">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">地址前缀</label>
+        <div class="col-sm-6">
+            <input name="targetPrefix" class="form-control" type="text">
+        </div>
+    </div>
+    <input name="servicePrefix" class="form-control" type="hidden">
+</script>
+
+<script type="text/x-handlebars-template" id="dubboTmpl">
+
+</script>
+
+<script type="text/x-handlebars-template" id="grpcTmpl">
+
+</script>
+
+
+<script>
+    routeConfig = {
+        init: function (divObj) {
+            var data = {};
+            var tpl = $("#routeTypeTmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            $(divObj).html(html);
+            $("#routeType").change(function () {
+                routeConfig.changeRouteContent()
+            });
+            $("#routeType").change();
+        },
+        getFormatResult: function (divObj) {
+            var routeDefinition = {};
+            routeDefinition.routerType = $("#routeType").val();
+            var routeParam = {};
+            $.each($(divObj).find("input,select"), function (i, val) {
+                if ($(val).attr("type") == "file") {
+                    return;
+                }
+                if ($(val).attr("name") == "servicePrefix") {
+                    routeParam[$(val).attr("name")] = $("input[name=servicePrefix]").val();
+                } else {
+                    routeParam[$(val).attr("name")] = $(val).val();
+                }
+            })
+            routeDefinition.routerParam = JSON.stringify(routeParam);
+            return routeDefinition;
+        },
+        changeRouteContent: function () {
+            var data = {};
+            var tpl = $("#" + $("#routeType").find("option:selected").data("routertmpl")).html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            $('#routeConent').html(html);
+            $('#routeConent').find("input[name='selfSignCrtFile']").prettyFile();
+            $('#routeConent').find("input[name='selfSignCrtFile']").change(function () {
+                var fileName = $('#routeConent').find("input[name='selfSignCrtFile']").val() +
+                    "::" + $('#routeConent').find("input[name='selfSignCrtFile']").val();
+                $('#routeConent').find("input[name='selfSignCrtFileId']").val(fileName);
+            });
+            $('#routeConent').find("select").selectpicker('refresh');
+        },
+        refreshDivByParam: function (pluginParam, divObj) {
+            var routeDefinition = pluginParam;
+            $('#routeType').selectpicker('val', routeDefinition.routerType);
+            if (routeDefinition.routerParam == null) {
+                return;
+            }
+            var routerParam = JSON.parse(routeDefinition.routerParam);
+            Object.keys(routerParam).forEach(function (key) {
+                $(divObj).find("input[name='" + key + "'],select[name='" + key + "']").val(routerParam[key]);
+            });
+            divObj.find("select").selectpicker('render');
+        }
+    }
+</script>

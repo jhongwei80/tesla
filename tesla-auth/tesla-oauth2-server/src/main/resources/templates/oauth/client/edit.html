@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org"
+>
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>编辑客户端</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        <a class="close-link"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="clientForm">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">客户端ID </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="clientId" name="clientId"
+                                       th:value="${clientDetail.clientId}" type="text">
+                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                                        请输入客户端ID,唯一标识客户端,如smsweb </span>
+                            </div>
+                            <div class="col-sm-1">
+                                <span class="require_tip">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">客户端名称 </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="clientName" name="clientName"
+                                       th:value="${clientDetail.clientName}" type="text">
+                            </div>
+                            <div class="col-sm-1">
+                                <span class="require_tip">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">客户端秘钥 </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="clientSecret" name="clientSecret"
+                                       th:value="${clientDetail.clientSecret}" type="text">
+                            </div>
+                            <div class="col-sm-1">
+                                <span class="require_tip">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">客户端Uri </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="clientUri" name="clientUri"
+                                       th:value="${clientDetail.clientUri}" type="text">
+                            </div>
+                            <div class="col-sm-1">
+                                <span class="require_tip">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">redirectUri </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="redirectUri" name="redirectUri"
+                                       th:value="${clientDetail.redirectUri}" type="text">
+                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                                        请输入redirectUri,该uri需与请求时的 redirectUri 一致 </span>
+                            </div>
+                            <div class="col-sm-1">
+                                <span class="require_tip">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">客户端图标Uri </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="clientIconUri" name="clientIconUri"
+                                       th:value="${clientDetail.clientIconUri}" type="text">
+                            </div>
+                            <div class="col-sm-1">
+                                <span class="require_tip">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">客户端资源ids </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="resourceIds" name="resourceIds"
+                                       th:value="${clientDetail.resourceIds}" type="text">
+                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                                        请输入客户端资源ids,多个资源id用英文,分割 </span>
+                            </div>
+                            <div class="col-sm-1">
+                                <span class="require_tip">*</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">scope </label>
+                            <div class="col-sm-6">
+                                <select class="form-control m-b selectpicker" data-style="btn-white" id="scope"
+                                        name="scope" >
+                                    <option value="read">read</option>
+                                    <option value="write">write</option>
+                                    <option value="read write">read write</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1">
+                                <span class="require_tip">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">授权类型 </label>
+                            <div class="col-sm-6">
+                                <select class="form-control m-b selectpicker" data-style="btn-white" id="grantTypes"
+                                        multiple
+                                        name="grantTypes" >
+                                    <option value="authorization_code">authorization_code</option>
+                                    <option value="password">password</option>
+                                    <option value="refresh_token">refresh_token</option>
+                                    <option value="client_credentials">client_credentials</option>
+                                </select>
+                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                                        该客户端支持的授权类型，可多选 </span>
+                            </div>
+                            <div class="col-sm-1">
+                                <span class="require_tip">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">accessToken超时(s) </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="accessTokenValidity"
+                                       name="accessTokenValidity" th:value="${clientDetail.accessTokenValidity}"
+                                       type="text">
+                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                                        accessToken失效时间，单位秒，配置<=0时会取默认值12小时 </span>
+                            </div>
+                            <div class="col-sm-1">
+                                <span class="require_tip">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">refreshToken超时(s) </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="refreshTokenValidity"
+                                       name="refreshTokenValidity" th:value="${clientDetail.refreshTokenValidity}"
+                                       type="text">
+                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                                        refreshToken失效时间，单位秒，配置<=0时会取默认值30天 </span>
+                            </div>
+                            <div class="col-sm-1">
+                                <span class="require_tip">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">说明 </label>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="description"
+                                       name="description" th:value="${clientDetail.description}" type="text">
+                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>
+                                        概述该客户端的使用用途 </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button class="btn btn-primary" type="submit">提交</button>
+                                <button class="btn btn-default" id="close" onclick="removeIframeWithSwal()"
+                                        type="button">关闭
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:include="common/iframeInclud :: footer"></div>
+<script src="/js/appjs/oauth/client/edit.js" type="text/javascript"></script>
+
+<script th:inline="javascript">
+    $(function () {
+        $("#grantTypes").selectpicker('val', [[${clientDetail.grantTypes}]].split(","));
+        $("#scope").selectpicker('val', [[${clientDetail.scope}]]);
+    })
+</script>
+</body>
+</html>

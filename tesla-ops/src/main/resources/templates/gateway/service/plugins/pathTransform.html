@@ -1,0 +1,52 @@
+<script type="text/x-handlebars-template" id="endpoint_pathTransform_tmpl">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            后端endpoint插件配置-url重写
+        </div>
+        <div class="panel-body" name="endpoint_plugin_pathTransform">
+            <input type="hidden" name="transformPath">
+            <input type="hidden" name="servicePrefix">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">转换表达式</label>
+                <div class="col-sm-6">
+                    <input name="patternPath" class="form-control" placeholder="对path进行特殊化转换，支持占位符，如/service/#{1}" type="text">
+                </div>
+                <span class="require_tip">*</span>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+    pathTransformConfig = {
+        init: function (endpointDiv, authType) {
+            var data = {};
+            var tpl = $("#endpoint_pathTransform_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").append(html);
+        },
+        remove: function (endpointDiv, authType) {
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").find("div[name='endpoint_plugin_pathTransform']").parent().remove();
+        },
+        getFormatResult: function (endpointDiv, pluginList) {
+            var pathTransformDefinition = {};
+            $.each(endpointDiv.find("div[name='endpoint_plugin_pathTransform']").find("input,select"), function (i, val) {
+                pathTransformDefinition[ $(val).attr("name")] = $(val).val();
+            })
+            var plugin = {};
+            plugin.pluginType = "PathTransformRequestPlugin";
+            plugin.pluginName = "path转换插件";
+            plugin.pluginParam = JSON.stringify(pathTransformDefinition);
+            pluginList.push(plugin);
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, endpointDiv, pluginType) {
+            var pathTransformDefinition = JSON.parse(pluginParam);
+            Object.keys(pathTransformDefinition).forEach(function (key) {
+                endpointDiv.find("div[name='endpoint_plugin_pathTransform']").find("input[name='" + key + "'],select[name='" + key + "']").val(pathTransformDefinition[key]);
+            });
+        }
+    }
+</script>

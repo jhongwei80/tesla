@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>节点管理
+                        <small>节点列表</small>
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <table id="nodeTable"></table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<scpript th:include="common/iframeInclud :: footer"></scpript>
+<script th:src="@{/js/appjs/system/nodemonitor/list.js}" type="text/javascript"></script>
+<div>
+    <script type="text/javascript">
+        var s_heap_h = 'hidden';
+        var s_thread_h = 'hidden';
+    </script>
+</div>
+<div shiro:hasPermission="sys:monitor:heapdump">
+    <script type="text/javascript">
+        s_heap_h = '';
+    </script>
+</div>
+<div shiro:hasPermission="sys:monitor:threaddump">
+    <script type="text/javascript">
+        s_thread_h = '';
+    </script>
+</div>
+<div shiro:hasPermission="sys:dept:remove">
+    <script type="text/javascript">
+        s_remove_h = '';
+    </script>
+</div>
+</body>
+
+</html>
+

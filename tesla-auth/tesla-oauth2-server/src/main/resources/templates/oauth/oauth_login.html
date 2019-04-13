@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org">
+<head th:include="/common/head :: header"></head>
+<body class="gray-bg">
+<style type="text/css">
+    h1.logo-name {
+        font-size: 130px;
+    }
+
+    .logo-name {
+        letter-spacing: 0px;
+    }
+</style>
+
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+    <div>
+        <div>
+            <h1 class="logo-name">OSG</h1>
+            <p>
+                登录使用的 client_id: <span th:text="${param.client_id[0]}"></span>
+            </p>
+        </div>
+
+        <form action="/oauth/authorize" class="form-horizontal" id="oauth2-form" method="post">
+            <input name="client_id" th:unless="${param.client_id == null}" th:value="${param.client_id[0]}"
+                   type="hidden"/>
+            <input name="scope" th:unless="${param.scope == null}" th:value="${param.scope[0]}" type="hidden"/>
+            <input name="response_type" th:unless="${param.response_type == null}" th:value="${param.response_type[0]}"
+                   type="hidden"/>
+            <input name="redirect_uri" th:unless="${param.redirect_uri == null}" th:value="${param.redirect_uri[0]}"
+                   type="hidden"/>
+            <input name="state" th:unless="${param.state == null}" th:value="${param.state[0]}" type="hidden"/>
+            <input name="client_secret" th:unless="${param.client_secret == null}" th:value="${param.client_secret[0]}"
+                   type="hidden"/>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Username</label>
+
+                <div class="col-sm-9">
+                    <input class="form-control" name="username" placeholder="Type username" required="required"
+                           type="text"
+                           value=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Password</label>
+
+                <div class="col-sm-9">
+                    <input class="form-control" name="password" placeholder="Type password" required="required"
+                           type="password"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input class="btn btn-primary" type="submit" value="Login"/>
+                    &nbsp;
+                    <span style="color:red;" th:if="${oauth_login_error}">Login failed</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:include="/common/foot :: footer"></div>
+</body>
+
+</html>

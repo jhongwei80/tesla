@@ -1,0 +1,205 @@
+<script type="text/x-handlebars-template" id="endpoint_createtoken_tmpl">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            后端endpoint插件配置-创建token
+        </div>
+        <div class="panel-body" name="endpoint_plugin_createToken">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#endpoint_plugin_createToken_request_{{endpointDivId}}"
+                           aria-expanded="true">
+                            REQUEST</a>
+                    </li>
+                    <li class="">
+                        <a data-toggle="tab" href="#endpoint_plugin_createToken_response_{{endpointDivId}}"
+                           aria-expanded="false">
+                            RESPONSE</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="endpoint_plugin_createToken_request_{{endpointDivId}}"
+                         name="endpoint_plugin_createToken_request" class="tab-pane active">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">token类型</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control m-b selectpicker"
+                                            data-style="btn-white"
+                                            name="tokenType">
+                                        <option value="" data-tmpl="endpoint_createtoken_open_tmpl">关闭</option>
+                                        <option value="jwt" data-tmpl="endpoint_createtoken_jwt_tmpl">jwt</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div name="createTokenConent">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="endpoint_plugin_createToken_response_{{endpointDivId}}"
+                         name="endpoint_plugin_createToken_response" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">token类型</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control m-b selectpicker"
+                                            data-style="btn-white"
+                                            name="tokenType">
+                                        <option value="" data-tmpl="endpoint_createtoken_open_tmpl">关闭</option>
+                                        <option value="jwt" data-tmpl="endpoint_createtoken_jwt_tmpl">jwt</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div name="createTokenConent">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/x-handlebars-template" id="endpoint_createtoken_open_tmpl">
+</script>
+<script type="text/x-handlebars-template" id="endpoint_createtoken_oauth_tmpl">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">clientIdHeader</label>
+        <div class="col-sm-6">
+            <input name="oauthClientIdHeaderKey" class="form-control" placeholder="从哪个header中取ClientId" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">SecretHeader</label>
+        <div class="col-sm-6">
+            <input name="secretHeaderKey" class="form-control" placeholder="从哪个header中取Secret" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">tokenHeader</label>
+        <div class="col-sm-6">
+            <input name="tokenHeaderKey" class="form-control" placeholder="token放入哪个header" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+</script>
+<script type="text/x-handlebars-template" id="endpoint_createtoken_jwt_tmpl">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">expiresHeader</label>
+        <div class="col-sm-6">
+            <input name="expiresHeaderKey" class="form-control" placeholder="从哪个header中取超时时间" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">issuer</label>
+        <div class="col-sm-6">
+            <input name="issuer" class="form-control" placeholder="可填为BKJK" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">claimsHeader</label>
+        <div class="col-sm-6">
+            <input name="claimsHeaderKey" class="form-control" placeholder="从哪个header中取claims" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">secretKey</label>
+        <div class="col-sm-6">
+            <input name="secretKey" class="form-control" placeholder="生成token使用的秘钥" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">tokenHeader</label>
+        <div class="col-sm-6">
+            <input name="tokenHeaderKey" class="form-control" placeholder="生成的token放入哪个header" type="text">
+        </div>
+        <span class="require_tip">*</span>
+    </div>
+</script>
+
+<script>
+    createTokenConfig = {
+        init: function (endpointDiv, authType) {
+            var endpointDivId = endpointDiv.attr("id");
+            var data = {endpointDivId: endpointDivId};
+            var tpl = $("#endpoint_createtoken_tmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").append(html);
+            createTokenConfig.initByType(endpointDiv, authType, "request");
+            createTokenConfig.initByType(endpointDiv, authType, "response");
+        },
+        initByType: function (endpointDiv, authType, type) {
+            endpointDiv.find("div[name='endpoint_plugin_createToken_" + type + "']").find("select[name='tokenType']").selectpicker('refresh');
+            endpointDiv.find("div[name='endpoint_plugin_createToken_" + type + "']").find("select[name='tokenType']").change(function () {
+                createTokenConfig.changeAuthContent(endpointDiv, type);
+            });
+            endpointDiv.find("div[name='endpoint_plugin_createToken']").find("select[name='tokenType']").change();
+        },
+        changeAuthContent: function (endpointDiv, type) {
+            var data = {};
+            var tpl = $("#" + endpointDiv.find("div[name='endpoint_plugin_createToken_" + type + "']")
+                .find("select[name='tokenType']").find("option:selected").data("tmpl")).html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            endpointDiv.find("div[name='endpoint_plugin_createToken_" + type + "']").find("div[name='createTokenConent']").html(html);
+        },
+        remove: function (endpointDiv, authType) {
+            endpointDiv.find("div[name='selectedPluginConfigDiv']").find("div[name='endpoint_plugin_createToken']").parent().remove();
+        },
+        getFormatResult: function (endpointDiv, pluginList) {
+            pluginList = createTokenConfig.getFormatResultByType(endpointDiv, pluginList, "request");
+            pluginList = createTokenConfig.getFormatResultByType(endpointDiv, pluginList, "response");
+            return pluginList;
+        },
+        getFormatResultByType: function (endpointDiv, pluginList, type) {
+            var plugin = {};
+            if (type == "request") {
+                plugin.pluginType = "CreateTokenRequestPlugin";
+            } else if (type == "response") {
+                plugin.pluginType = "CreateTokenResponsePlugin";
+            }
+            var createTokenDefinition = {};
+            createTokenDefinition.tokenType = endpointDiv.find("div[name='endpoint_plugin_createToken_" + type + "']")
+                .find("select[name='tokenType']").val();
+            if (createTokenDefinition.tokenType == "") {
+                return pluginList;
+            }
+            var paramDefinition = {};
+            $.each(endpointDiv.find("div[name='endpoint_plugin_createToken_" + type + "']")
+                .find("div[name='createTokenConent']").find("input,select"), function (i, val) {
+                paramDefinition[$(val).attr("name")] = $(val).val();
+            })
+            if (Object.keys(paramDefinition).length > 0) {
+                createTokenDefinition.tokenParamJson = JSON.stringify(paramDefinition);
+                plugin.pluginName = "create Token 插件";
+                plugin.pluginParam = JSON.stringify(createTokenDefinition);
+                pluginList.push(plugin);
+            }
+            return pluginList;
+        },
+        refreshDivByParam: function (pluginParam, endpointDiv, pluginType) {
+            var createTokenDefinition = JSON.parse(pluginParam);
+            var type;
+            if (pluginType == "CreateTokenRequestPlugin") {
+                type = "request";
+            } else if (pluginType == "CreateTokenResponsePlugin") {
+                type = "response";
+            }
+            endpointDiv.find("div[name='endpoint_plugin_createToken_" + type + "']")
+                .find("select[name='tokenType']").selectpicker('val', createTokenDefinition.tokenType);
+            var paramDefinition = JSON.parse(createTokenDefinition.tokenParamJson);
+            Object.keys(paramDefinition).forEach(function (key) {
+                endpointDiv.find("div[name='endpoint_plugin_createToken_" + type + "']")
+                    .find("div[name='createTokenConent']").find("input[name='" + key + "'],select[name='" + key + "']").val(paramDefinition[key]);
+            });
+        }
+    }
+</script>

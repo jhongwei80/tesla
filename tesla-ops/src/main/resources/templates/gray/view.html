@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>灰度策略拓扑图</h5>
+					<div class="ibox-tools">
+						<a class="close-link"><i class="fa fa-times"></i></a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div id="grayNetwork" style="min-height:400px;"></div>
+                    <div id="grayRuleTip" class="vis-tooltip" style="left: 0px; top: 0px; visibility: hidden;"></div>
+					<textarea id="grayRule" cols="100" role="20" style="min-height:200px;" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<scpript th:include="common/iframeInclud :: footer"></scpript>
+
+<link type="text/css" rel="stylesheet" th:href="@{/js/plugins/vis/vis.css}" />
+<script type="text/javascript" th:src="@{/js/plugins/vis/vis.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        var result = [[${nodes}]];
+        initNetWork(result);
+    });
+</script>
+<script type="text/javascript" th:src="@{/js/appjs/gray/view.js}"></script>
+</body>
+</html>

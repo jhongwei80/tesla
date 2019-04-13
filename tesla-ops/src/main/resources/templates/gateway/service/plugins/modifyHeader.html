@@ -1,0 +1,270 @@
+<script type="text/x-handlebars-template" id="modifyHeaderTmpl">
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#service_header_request" aria-expanded="true"> REQUEST</a>
+            </li>
+            <li class="">
+                <a data-toggle="tab" href="#service_header_response" aria-expanded="false"> RESPONSE</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="service_header_request" name="service_header_request" class="tab-pane active">
+                <div class="panel-body">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">删除header</label>
+                            <div class="col-sm-6">
+                                <input placeholder="header" type="text"
+                                       name="deleteHeader" class="form-control">
+                            </div>
+                            <div class="col-sm-1">
+                                <button name="deleteHeader" type="button"
+                                        class="btn btn-info"> 添 加
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">添加header</label>
+                            <div class="col-sm-3">
+                                <input placeholder="key" type="text"
+                                       name="addHeaderKey"
+                                       class="form-control">
+                            </div>
+                            <div class="col-sm-3">
+                                <input placeholder="value" type="text"
+                                       name="addHeaderValue"
+                                       class="form-control">
+                            </div>
+                            <div class="col-sm-1">
+                                <button class="btn btn-info" type="button"
+                                        name="addHeader"> 添 加
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-sm-4">
+                        <ul class="list-group" name="deleteHeader">
+                        </ul>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-sm-4">
+                        <ul class="list-group" name="addHeader">
+                        </ul>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                </div>
+            </div>
+            <div id="service_header_response" name="service_header_response" class="tab-pane">
+                <div class="panel-body">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">删除header</label>
+                            <div class="col-sm-6">
+                                <input placeholder="header" type="text"
+                                       name="deleteHeader" class="form-control">
+                            </div>
+                            <div class="col-sm-1">
+                                <button name="deleteHeader" type="button"
+                                        class="btn btn-info"> 添 加
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">添加header</label>
+                            <div class="col-sm-3">
+                                <input placeholder="key" type="text"
+                                       name="addHeaderKey"
+                                       class="form-control">
+                            </div>
+                            <div class="col-sm-3">
+                                <input placeholder="value" type="text"
+                                       name="addHeaderValue"
+                                       class="form-control">
+                            </div>
+                            <div class="col-sm-1">
+                                <button class="btn btn-info" type="button"
+                                        name="addHeader"> 添 加
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-sm-4">
+                        <ul class="list-group" name="deleteHeader">
+                        </ul>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-sm-4">
+                        <ul class="list-group" name="addHeader">
+                        </ul>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</script>
+
+<script type="text/x-handlebars-template" id="deletHeaderLiTmpl">
+    <li class="list-group-item"><span>{{deletHeader}}</span>
+        <button class="btn btn-warning btn-circle" type="button" style="float: right;margin-bottom: 3px"
+                onclick="serviceHeaderConfig.deleteHeader(this)">
+            <i class="fa fa-times"></i></button>
+    </li>
+</script>
+
+<script type="text/x-handlebars-template" id="addHeaderLiTmpl">
+    <li class="list-group-item"><span>{{addHeaderKey}} ::: {{addHeaderValue}}</span>
+        <button class="btn btn-warning btn-circle" type="button" style="float: right;margin-bottom: 3px"
+                onclick="serviceHeaderConfig.deleteHeader(this)">
+            <i class="fa fa-times"></i></button>
+    </li>
+</script>
+
+<script>
+    serviceHeaderConfig = {
+        init: function (divObj) {
+
+            var data = {};
+            var tpl = $("#modifyHeaderTmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            $(divObj).html(html);
+
+            $("#service_header_request").find("button[name='deleteHeader']").click(function () {
+                var headerKey = $("#service_header_request").find("input[name='deleteHeader']").val();
+                if (headerKey == "") {
+                    return;
+                }
+                var data = {"deletHeader": headerKey};
+                var tpl = $("#deletHeaderLiTmpl").html();
+                var template = Handlebars.compile(tpl);
+                var html = template(data);
+                $("#service_header_request").find("ul[name='deleteHeader']").append(html);
+                $("#service_header_request").find("input[name='deleteHeader']").val("");
+            })
+            $("#service_header_request").find("button[name='addHeader']").click(function () {
+                var headerKey = $("#service_header_request").find("input[name='addHeaderKey']").val();
+                var headerValue = $("#service_header_request").find("input[name='addHeaderValue']").val();
+                if (headerKey == "" || headerValue == "") {
+                    return;
+                }
+                var data = {"addHeaderKey": headerKey, "addHeaderValue": headerValue};
+                var tpl = $("#addHeaderLiTmpl").html();
+                var template = Handlebars.compile(tpl);
+                var html = template(data);
+                $("#service_header_request").find("ul[name='addHeader']").append(html);
+                $("#service_header_request").find("input[name='addHeaderKey']").val("");
+                $("#service_header_request").find("input[name='addHeaderValue']").val("");
+            })
+            $("#service_header_response").find("button[name='deleteHeader']").click(function () {
+                var headerKey = $("#service_header_response").find("input[name='deleteHeader']").val();
+                if (headerKey == "") {
+                    return;
+                }
+                var data = {"deletHeader": headerKey};
+                var tpl = $("#deletHeaderLiTmpl").html();
+                var template = Handlebars.compile(tpl);
+                var html = template(data);
+                $("#service_header_response").find("ul[name='deleteHeader']").append(html);
+                $("#service_header_response").find("input[name='deleteHeader']").val("");
+            })
+            $("#service_header_response").find("button[name='addHeader']").click(function () {
+                var headerKey = $("#service_header_response").find("input[name='addHeaderKey']").val();
+                var headerValue = $("#service_header_response").find("input[name='addHeaderValue']").val();
+                if (headerKey == "" || headerValue == "") {
+                    return;
+                }
+                var data = {"addHeaderKey": headerKey, "addHeaderValue": headerValue};
+                var tpl = $("#addHeaderLiTmpl").html();
+                var template = Handlebars.compile(tpl);
+                var html = template(data);
+                $("#service_header_response").find("ul[name='addHeader']").append(html);
+                $("#service_header_response").find("input[name='addHeaderKey']").val("");
+                $("#service_header_response").find("input[name='addHeaderValue']").val("");
+            })
+        },
+        getFormatResult: function (divObj, type, pluginList) {
+            var plugin = {};
+            var divName;
+            if (type == "request") {
+                plugin.pluginType = "ModifyHeaderRequestPlugin";
+                divName = "service_header_request";
+            } else if (type == "response") {
+                plugin.pluginType = "ModifyHeaderResponsePlugin";
+                divName = "service_header_response";
+            }
+            var modifyHeaderDefinition = {};
+            var deleteHeaders = [];
+            $.each($(divObj).find("div[name='" + divName + "']").find("ul[name='deleteHeader']").find("li"), function (i, val) {
+                deleteHeaders[i] = $(val).find("span").text();
+            })
+            var addHeaders = {};
+            $.each($(divObj).find("div[name='" + divName + "']").find("ul[name='addHeader']").find("li"), function (i, val) {
+                var mapValue = $(val).find("span").text();
+                addHeaders[mapValue.split(' ::: ')[0]] = mapValue.split(' ::: ')[1];
+            })
+            if (deleteHeaders.length > 0) {
+                modifyHeaderDefinition.removeHeader = deleteHeaders;
+            }
+            if (Object.keys(addHeaders).length > 0) {
+                modifyHeaderDefinition.addHeader = addHeaders;
+            }
+            if (Object.keys(modifyHeaderDefinition).length > 0) {
+                plugin.pluginName = "修改Header插件";
+                plugin.pluginParam = JSON.stringify(modifyHeaderDefinition);
+                pluginList.push(plugin);
+            }
+            return pluginList;
+        },
+        deleteHeader: function (obj) {
+            $(obj).parent().remove();
+        },
+        refreshDivByParam: function (pluginParam, divObj, pluginType) {
+            var modifyHeaderDefinition = JSON.parse(pluginParam);
+            var divName;
+            if (pluginType == "ModifyHeaderRequestPlugin") {
+                divName = "service_header_request";
+            } else if (pluginType == "ModifyHeaderResponsePlugin") {
+                divName = "service_header_response";
+            }
+            var deleteHeaders = modifyHeaderDefinition.removeHeader;
+            var addHeaders = modifyHeaderDefinition.addHeader;
+            if (deleteHeaders != undefined) {
+                deleteHeaders.forEach(function (key) {
+                    $(divObj).find("div[name='" + divName + "']").find("input[name='deleteHeader']").val(key);
+                    $(divObj).find("div[name='" + divName + "']").find("button[name='deleteHeader']").click();
+                });
+            }
+            if (addHeaders != undefined) {
+                Object.keys(addHeaders).forEach(function (key) {
+                    $(divObj).find("div[name='" + divName + "']").find("input[name='addHeaderKey']").val(key);
+                    $(divObj).find("div[name='" + divName + "']").find("input[name='addHeaderValue']").val(addHeaders[key]);
+                    $(divObj).find("div[name='" + divName + "']").find("button[name='addHeader']").click();
+                });
+            }
+        }
+    }
+</script>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>系统管理 <small>用户管理</small></h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        <a class="close-link"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div id="userToolBar" class="form-inline">
+                        <div class="btn-group hidden-xs pull-left" role="group">
+                            <div class="input-group">
+                                请选择部门:
+                                <select name="deptId" id="deptId" class="selectpicker" data-style="btn-white">
+                                    <option value="0">选择部门</option>
+                                    <option th:each="dept:${depts}" th:value="${dept.deptId}" th:text="${dept.name}"/>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" id="searchName" placeholder="请输入姓名" class="form-control">
+                                <span class="input-group-btn"><button type="button" class="btn btn-primary" onclick="refresh()">搜索</button></span>
+                            </div>
+                        </div>
+                        <div class="btn-group hidden-xs pull-right" role="group">
+                            <div class="input-group">
+                                <button shiro:hasPermission="sys:menu:add" type="button" class="btn btn-outline btn-default" onclick="add(0)">
+                                    <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="input-group">
+                                <button type="button" class="btn btn-default btn-outline" onclick="refresh()">
+                                    <i class="glyphicon glyphicon-repeat" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="userTable" data-mobile-responsive="true" class="mb-bootstrap-table text-nowrap"></table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:include="common/iframeInclud :: footer"></div>
+<script type="text/javascript" src="/js/appjs/system/user/user.js"></script>
+
+<div>
+    <script type="text/javascript">
+        var s_add_h = 'hidden';
+        var s_edit_h = 'hidden';
+        var s_remove_h = 'hidden';
+    </script>
+</div>
+<div>
+    <script type="text/javascript">
+        var s_edit_h = 'hidden';
+        var s_remove_h = 'hidden';
+        var s_resetPwd_h = 'hidden';
+    </script>
+</div>
+<div shiro:hasPermission="sys:user:edit">
+    <script type="text/javascript">
+        s_edit_h = '';
+    </script>
+</div>
+<div shiro:hasPermission="sys:user:remove">
+    <script type="text/javascript">
+        s_remove_h = '';
+    </script>
+</div>
+<div shiro:hasPermission="sys:user:resetPwd">
+    <script type="text/javascript">
+        s_resetPwd_h = '';
+    </script>
+</div>
+</body>
+</html>

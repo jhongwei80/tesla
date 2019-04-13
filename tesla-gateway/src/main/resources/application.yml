@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: tesla-gateway
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?useUnicode=true&characterEncoding=utf8
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+server:
+  port: ${TESLA_SERVER_PORT:8089}
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER}
+hazelcast:
+  version: 1.0.0
+dubbo:
+  registryAddress: ${ZOOKEEPER_SERVER}
+management:
+  metrics:
+    export:
+      influx:
+        enabled: false
+        uri: http://localhost:8086

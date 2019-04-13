@@ -1,0 +1,173 @@
+<script id="selectedPluginDiv_button" type="text/x-handlebars-template">
+    <div class="btn-group">
+        <button data-toggle="dropdown" name="{{pluginType}}"
+                class="btn btn-warning dropdown-toggle">
+            {{pluginName}} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="javascript:removeEndpointPlugin('endpoint-{{index}}','{{pluginType}}')">删除</a>
+            </li>
+        </ul>
+    </div>
+</script>
+<script type="text/x-handlebars-template" id="endpointTmpl">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a name="endpoint-close" data-toggle="collapse" data-parent="#endpointList" href="#endpoint-{{index}}">
+                <b name="endpoint-title-{{index}}">endpoint配置 :: ALL</b>
+            </a>
+        </div>
+        <div id="endpoint-{{index}}" name="endpoint" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="form-group col-sm-1" style="text-align: center">
+                    <button class="btn btn-warning btn-circle" style="margin-top: 20px"
+                            type="button" onclick="removeEndpoint('endpoint-{{index}}')"><i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <input type="hidden" name="index" value="{{index}}">
+                <div class="form-group col-sm-3">
+                    <label>MethodType</label>
+                    <select class="form-control m-b selectpicker"
+                            data-style="btn-white" name="endpointMethod">
+                        <option value="ALL">ALL</option>
+                        <option value="POST">POST</option>
+                        <option value="GET">GET</option>
+                        <option value="PUT">PUT</option>
+                        <option value="DELETE">DELETE</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-1"></div>
+                <div class="form-group col-sm-3">
+                    <label>Path<span style="color: red;font-weight: bold">*</span></label>
+                    <input name="endpointUrl" class="form-control" placeholder="/v1/**"
+                           type="text" required>
+                </div>
+                <div class="form-group col-sm-1"></div>
+                <div class="form-group col-sm-3">
+                    <label>Plugins</label>
+                    <select class="form-control m-b selectpicker"
+                            data-style="btn-white" name="endpointPluginsSelect" multiple>
+                    </select>
+                </div>
+                <div class="col-sm-12" name="selectedPluginDiv">
+
+                </div>
+                <div class="col-sm-12" name="selectedPluginConfigDiv">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+    var endPointIndex = 0;
+    endpointConfig = {
+        init: function () {
+            var tmpindex = ++endPointIndex;
+            var data = {
+                index: tmpindex
+            };
+            var tpl = $("#endpointTmpl").html();
+            var template = Handlebars.compile(tpl);
+            var html = template(data);
+            $("#endpointListPanelBody").append(html);
+            /*$("#endpoint-" + tmpindex).find("select").selectpicker('refresh');*/
+            addEventOnPluginSelect($("#endpoint-" + tmpindex));
+            $("#endpoint-" + tmpindex).find("input[name='endpointUrl']").blur(function () {
+                endpointConfig.changeTitle(tmpindex, $("#endpoint-" + tmpindex));
+            });
+            $("#endpoint-" + tmpindex).find("select[name='endpointMethod']").change(function () {
+                endpointConfig.changeTitle(tmpindex, $("#endpoint-" + tmpindex));
+            });
+        },
+        changeTitle: function (tmpindex, divObj) {
+            $("b[name='endpoint-title-" + tmpindex + "']").text(
+                "endpoint配置 :: " + divObj.find("select[name='endpointMethod']").val()
+                + " :: "
+                + path(divObj.find("input[name='endpointUrl']").val()));
+        },
+        refreshDivByParam: function (endpoint, divObj) {
+            divObj.find("input[name='endpointUrl']").val(endpoint.endpointUrl);
+            divObj.find("select[name='endpointMethod']").selectpicker('val', endpoint.endpointMethod);
+            var pluginSelected = [];
+            endpoint.pluginDTOList.forEach(function (plugin) {
+                pluginSelected.push(getPluginValueByType(plugin.pluginType));
+            });
+            divObj.find("select[name='endpointPluginsSelect']").selectpicker('val', pluginSelected);
+            //清除模板
+            clearTextarea(divObj);
+            endpoint.pluginDTOList.forEach(function (plugin) {
+                getConfig(getPluginValueByType(plugin.pluginType)).refreshDivByParam(plugin.pluginParam, divObj, plugin.pluginType);
+            });
+        }
+    }
+
+    function getPluginValueByType(pluginType) {
+        switch (pluginType) {
+            case 'IgnoreAuthRequestPlugin':
+                return 'IgnoreAuth';
+                break;
+            case 'CreateTokenRequestPlugin':
+                return 'CreateToken';
+                break;
+            case 'CreateTokenResponsePlugin':
+                return 'CreateToken';
+                break;
+            case 'SilentRegistrationRequestPlugin':
+                return 'SilentRegistration';
+                break;
+            case 'PathTransformRequestPlugin':
+                return 'PathTransform';
+                break;
+            case 'BodyTransformRequestPlugin':
+                return 'BodyTransform';
+                break;
+            case 'BodyTransformResponsePlugin':
+                return 'BodyTransform';
+                break;
+            case 'SignatureVerifyRequestPlugin':
+                return 'SignatureVerify';
+                break;
+            case 'JarExecuteRequestPlugin':
+                return 'JarExecute';
+                break;
+            case 'JarExecuteResponsePlugin':
+                return 'JarExecute';
+                break;
+            case 'GroovyExecuteRequestPlugin':
+                return 'GroovyExecute';
+                break;
+            case 'GroovyExecuteResponsePlugin':
+                return 'GroovyExecute';
+                break;
+            case 'RpcRoutingRequestPlugin':
+                return 'RpcRouting';
+                break;
+            case 'ModifyHeaderRequestPlugin':
+                return 'ModifyHeader';
+                break;
+            case 'ModifyHeaderResponsePlugin':
+                return 'ModifyHeader';
+                break;
+            case 'AccessTokenRequestPlugin':
+                return 'AccessToken';
+                break;
+            case 'CacheResultPlugin':
+                return 'CacheResult';
+                break;
+            case 'MockRequestPlugin':
+                return 'Mock';
+                break;
+            case 'QueryConvergeRequestPlugin':
+                return 'QueryConverge';
+                break;
+            case 'BodyValidateRequestPlugin':
+                return 'BodyValidate';
+                break;
+            default:
+                return undefined;
+        }
+    }
+</script>

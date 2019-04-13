@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en-us" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head th:include="common/iframeInclud :: header"></head>
+
+<body class="gray-bg">
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>TESLA简介</h5> <span class="label label-primary">TESLA</span>
+                </div>
+                <div class="ibox-content">
+                    <div>
+                        <span>
+<h2>TESLA简介</h2>
+<p>tesla为公司内部系统提供统一的，安全的入口服务，并通过多种可配置的插件灵活的实现自己需要的功能。</p>
+
+<p>tesla由tesla-ops(tesla管理控制台)和tesla-gateway(tesla网关)两个服务组成，开发和使用人员在tesla-ops上进行服务发布和调用方接入配置。</p>
+
+<ul>
+    <li><b>服务发布</b>：通过在tesla-ops的API管理菜单处进行配置，可将自己的服务通过tesla-gateway发布出去，其他系统可通过tesla-gateway访问到后端服务。</li>
+    <li><b>接入配置</b>：外部系统想通过tesla-gateway调用已发布的服务，可通过tesla-ops的接入管理菜单处进行配置，设置访问权限等功能。</li>
+</ul>
+
+<p>tesla还与summerframework结合，通过gateway为入口，实现了整个调用链的灰度节点选择，summerframework文档见platfrom-starter-eureka使用手册。</p>
+<h2>详细文档</h2>
+
+<ul>
+    <li>pdf版：<a href="/doc/TESLA%E6%8E%A5%E5%85%A5%E6%96%87%E6%A1%A3.pdf" target="_blank">TESLA接入文档(PDF版)</a></li>
+</ul>
+
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<scpript th:include="common/iframeInclud :: footer"></scpript>
+
+
+</body>
+
+</html>
+
