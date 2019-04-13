@@ -1,3 +1,4 @@
+
 -- ----------------------------
 -- Table structure for gateway_app_key
 -- ----------------------------
@@ -90,7 +91,7 @@ CREATE TABLE `gateway_cache_refresh`  (
 -- ----------------------------
 -- Records of gateway_cache_refresh
 -- ----------------------------
-INSERT INTO `gateway_cache_refresh` VALUES (1, '2019-04-13 15:35:46');
+INSERT INTO `gateway_cache_refresh` VALUES (1, '2019-04-13 10:12:34');
 
 -- ----------------------------
 -- Table structure for gateway_endpoint
@@ -107,7 +108,7 @@ CREATE TABLE `gateway_endpoint`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `endpoint_id`(`endpoint_id`) USING BTREE,
   UNIQUE INDEX `endpoint_id_url_method`(`service_id`, `endpoint_method`, `endpoint_url`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 784 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 785 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of gateway_endpoint
@@ -126,7 +127,6 @@ INSERT INTO `gateway_endpoint` VALUES (777, 'service_549949827350265856', 'endpo
 INSERT INTO `gateway_endpoint` VALUES (778, 'service_549949827350265856', 'endpoint_565606276629790726', 'ALL', '/queryMerge2', '2019-04-10 10:37:25', '2019-04-10 10:37:25');
 INSERT INTO `gateway_endpoint` VALUES (779, 'service_549949827350265856', 'endpoint_565606276629790727', 'ALL', '/signVerify/queryName', '2019-04-10 10:37:25', '2019-04-10 10:37:25');
 INSERT INTO `gateway_endpoint` VALUES (780, 'service_549949827350265856', 'endpoint_565606276629790728', 'POST', '/mock/queryName', '2019-04-10 10:37:25', '2019-04-10 10:37:25');
-INSERT INTO `gateway_endpoint` VALUES (781, 'service_test_cloud', 'endpoint_565606577524965376', 'ALL', '/queryName', '2019-04-10 10:38:37', '2019-04-10 10:38:37');
 INSERT INTO `gateway_endpoint` VALUES (782, 'service_test_dubbo', 'endpoint_565606810690519040', 'ALL', '/hello', '2019-04-10 10:39:32', '2019-04-10 10:39:32');
 INSERT INTO `gateway_endpoint` VALUES (783, 'service_5499498273502567854556', 'endpoint_565991436512657408', 'ALL', '/**', '2019-04-11 12:07:54', '2019-04-11 12:07:54');
 
@@ -298,7 +298,7 @@ CREATE TABLE `gateway_service`  (
   UNIQUE INDEX `service_id`(`service_id`) USING BTREE,
   UNIQUE INDEX `service_name`(`service_name`) USING BTREE,
   UNIQUE INDEX `service_prefix`(`service_prefix`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 215 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 216 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of gateway_service
@@ -306,7 +306,6 @@ CREATE TABLE `gateway_service`  (
 INSERT INTO `gateway_service` VALUES (114, 'service_54994982735025676575', '演示订单服务-uus-oauth2', '演示订单服务，为配置人员提供示例', 'Y', 'Y', '/demo-order-service-uus-oauth2', 'admin', '2019-02-26 19:41:19', '2019-02-27 10:17:46');
 INSERT INTO `gateway_service` VALUES (135, 'service_549949827350263445', '演示订单服务-jwt-auth', '演示订单服务，为配置人员提供示例', 'Y', 'Y', '/demo-order-service-jwt-auth', 'admin', '2019-02-26 19:25:55', '2019-02-28 11:50:58');
 INSERT INTO `gateway_service` VALUES (211, 'service_549949827350265856', '演示订单服务', '演示订单服务，为配置人员提供示例', 'Y', 'Y', '/demo-order-service', 'zhip.zhang001', '2019-02-26 13:44:17', '2019-04-13 07:35:20');
-INSERT INTO `gateway_service` VALUES (212, 'service_test_cloud', '服务化_cloud', '服务化标准-cloud', 'Y', 'Y', '/cloud-test', 'admin', '2018-12-17 14:34:35', '2019-04-10 10:38:36');
 INSERT INTO `gateway_service` VALUES (213, 'service_test_dubbo', '服务化_dubbo', '服务化标准-dubbo', 'Y', 'Y', '/dubbo-test', 'admin', '2018-12-17 14:34:36', '2019-04-10 10:39:32');
 INSERT INTO `gateway_service` VALUES (214, 'service_5499498273502567854556', '演示订单服务-spring-cloud', '演示订单服务，为配置人员提供示例', 'Y', 'Y', '/demo-order-service-spring-cloud', 'admin', '2019-02-27 10:56:52', '2019-04-11 12:07:54');
 
@@ -326,7 +325,7 @@ CREATE TABLE `gateway_service_plugin`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `plugin_id`(`plugin_id`) USING BTREE,
   UNIQUE INDEX `plugin_id_type`(`service_id`, `plugin_type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 344 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 346 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of gateway_service_plugin
@@ -334,8 +333,6 @@ CREATE TABLE `gateway_service_plugin`  (
 INSERT INTO `gateway_service_plugin` VALUES (193, 'service_54994982735025676575', 'servicePlugin_550260247575396352', '权限验证插件', 'AuthRequestPlugin', '{\"enabled\": \"Y\", \"authType\": \"oauth\", \"authParamJson\": \"{\\\"tokenHeaderKey\\\":\\\"X-BK-UUSSSO-Token\\\",\\\"parseClaims\\\":\\\"Y\\\",\\\"claimsHeaderKey\\\":\\\"X-BK-Jwt-Claims\\\"}\"}', '2019-02-27 10:17:46', '2019-02-27 10:17:46');
 INSERT INTO `gateway_service_plugin` VALUES (224, 'service_549949827350263445', 'servicePlugin_550646086931316736', '权限验证插件', 'AuthRequestPlugin', '{\"enabled\": \"Y\", \"authType\": \"jwt\", \"authParamJson\": \"{\\\"issuer\\\":\\\"BKJK\\\",\\\"secretKey\\\":\\\"1FihRrMitxjiEVC1ICytWdthUyWytD+7\\\",\\\"parseClaims\\\":\\\"Y\\\",\\\"claimsHeaderKey\\\":\\\"X-BK-Jwt-Claims\\\"}\"}', '2019-02-28 11:50:58', '2019-02-28 11:50:58');
 INSERT INTO `gateway_service_plugin` VALUES (340, 'service_549949827350265856', 'servicePlugin_565606275996450816', '修改Header插件', 'ModifyHeaderResponsePlugin', '{\"addHeader\": {\"header1\": \"value1\"}}', '2019-04-10 10:37:25', '2019-04-10 10:37:25');
-INSERT INTO `gateway_service_plugin` VALUES (341, 'service_test_cloud', 'servicePlugin_565606577109729280', '访问API限流插件', 'RateLimitRequestPlugin', '{\"rate\": 1, \"appId\": \"service_test_cloud\", \"enabled\": \"Y\", \"perSeconds\": 1}', '2019-04-10 10:38:36', '2019-04-10 10:38:36');
-INSERT INTO `gateway_service_plugin` VALUES (342, 'service_test_cloud', 'servicePlugin_565606577285890048', '跨域支持插件', 'CorsRequestPlugin', '{\"allowedOrigins\": \"*\", \"allowCredentials\": \"Y\", \"allowedRequestHeaders\": \"X-BK-UUSSSO-Token,X-BK-UUSSSO-BToken,Connection,User-Agent,Cookie,Token,Access-Control-Allow-Origin,Content-Type,X-Requested-With,Accept,Origin,gray,Access-Control-Request-Method,Access-Control-Request-Headers,X-BK-Signature,X-BK-Date,X-BK-Merchant\", \"allowedRequestMethods\": [\"POST\", \"GET\", \"PUT\", \"DELETE\", \"OPTIONS\"]}', '2019-04-10 10:38:37', '2019-04-10 10:38:37');
 INSERT INTO `gateway_service_plugin` VALUES (343, 'service_test_dubbo', 'servicePlugin_565606810518552576', '跨域支持插件', 'CorsRequestPlugin', '{\"allowedOrigins\": \"*\", \"allowCredentials\": \"Y\", \"allowedRequestHeaders\": \"X-BK-UUSSSO-Token,X-BK-UUSSSO-BToken,Connection,User-Agent,Cookie,Token,Access-Control-Allow-Origin,Content-Type,X-Requested-With,Accept,Origin,gray,Access-Control-Request-Method,Access-Control-Request-Headers,X-BK-Signature,X-BK-Date,X-BK-Merchant\", \"allowedRequestMethods\": [\"POST\", \"GET\", \"PUT\", \"DELETE\", \"OPTIONS\"]}', '2019-04-10 10:39:32', '2019-04-10 10:39:32');
 
 -- ----------------------------
@@ -353,7 +350,7 @@ CREATE TABLE `gateway_service_router`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `service_id`(`service_id`) USING BTREE,
   UNIQUE INDEX `router_id`(`router_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 205 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 206 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of gateway_service_router
@@ -361,7 +358,6 @@ CREATE TABLE `gateway_service_router`  (
 INSERT INTO `gateway_service_router` VALUES (106, 'service_54994982735025676575', 'serviceRouter_550260247567007744', 'direct', '{\"enableSSL\": \"N\", \"targetPrefix\": \"/order-service\", \"servicePrefix\": \"/demo-order-service-uus-oauth2\", \"targetHostPort\": \"10.241.0.42:8902\", \"selfSignCrtFileId\": \"\"}', '2019-02-27 10:17:46', '2019-02-27 10:17:46');
 INSERT INTO `gateway_service_router` VALUES (127, 'service_549949827350263445', 'serviceRouter_550646086918733824', 'direct', '{\"enableSSL\": \"N\", \"targetPrefix\": \"/order-service\", \"servicePrefix\": \"/demo-order-service-jwt-auth\", \"targetHostPort\": \"10.241.0.42:8902\", \"selfSignCrtFileId\": \"\"}', '2019-02-28 11:50:58', '2019-02-28 11:50:58');
 INSERT INTO `gateway_service_router` VALUES (201, 'service_549949827350265856', 'serviceRouter_565606275887398912', 'direct', '{\"enableSSL\": \"N\", \"targetPrefix\": \"/order-service\", \"servicePrefix\": \"/demo-order-service\", \"targetHostPort\": \"tesla-backend-sample:8902\", \"selfSignCrtFileId\": \"\"}', '2019-04-10 10:37:25', '2019-04-10 10:37:25');
-INSERT INTO `gateway_service_router` VALUES (202, 'service_test_cloud', 'serviceRouter_565606577071980544', 'springcloud', '{\"group\": \"\", \"version\": \"\", \"serviceName\": \"TESLA-BACKEND-SAMPLE\", \"targetPrefix\": \"\", \"servicePrefix\": \"/cloud-test\"}', '2019-04-10 10:38:36', '2019-04-10 10:38:36');
 INSERT INTO `gateway_service_router` VALUES (203, 'service_test_dubbo', 'serviceRouter_565606810497581056', 'dubbo', '{}', '2019-04-10 10:39:32', '2019-04-10 10:39:32');
 INSERT INTO `gateway_service_router` VALUES (204, 'service_5499498273502567854556', 'serviceRouter_565991436411994112', 'springcloud', '{\"group\": \"\", \"version\": \"\", \"serviceName\": \"TESLA-BACKEND-SAMPLE\", \"targetPrefix\": \"/order-service\", \"servicePrefix\": \"/demo-order-service-spring-cloud\"}', '2019-04-11 12:07:54', '2019-04-11 12:07:54');
 
@@ -408,7 +404,7 @@ CREATE TABLE `sys_data_backup`  (
   `operating_date` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `operating_user` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作人员',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 71 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_data_backup
@@ -473,6 +469,16 @@ INSERT INTO `sys_data_backup` VALUES (57, 'gateway_endpoint', 'DELETE', '{\"id\"
 INSERT INTO `sys_data_backup` VALUES (58, 'gateway_service_router', 'DELETE', '{\"id\": 182, \"routerId\": \"serviceRouter_562590045437952000\", \"gmtCreate\": 1554202319000, \"serviceId\": \"service_test_h5\", \"routerType\": \"direct\", \"gmtModified\": 1554202319000, \"routerParam\": \"{\\\"enableSSL\\\": \\\"Y\\\", \\\"targetPrefix\\\": \\\"\\\", \\\"servicePrefix\\\": \\\"/direct-test\\\", \\\"targetHostPort\\\": \\\"https://m.ke.com\\\", \\\"selfSignCrtFileId\\\": \\\"\\\"}\"}', '2019-04-11 12:08:08', 'admin');
 INSERT INTO `sys_data_backup` VALUES (59, 'gateway_service_plugin', 'DELETE', '{\"id\": 319, \"pluginId\": \"servicePlugin_562590046004183040\", \"gmtCreate\": 1554202319000, \"serviceId\": \"service_test_h5\", \"pluginName\": \"跨域支持插件\", \"pluginType\": \"CorsRequestPlugin\", \"gmtModified\": 1554202319000, \"pluginParam\": \"{\\\"allowedOrigins\\\": \\\"*\\\", \\\"allowCredentials\\\": \\\"Y\\\", \\\"allowedRequestHeaders\\\": \\\"X-BK-UUSSSO-Token,X-BK-UUSSSO-BToken,Connection,User-Agent,Cookie,Token,Access-Control-Allow-Origin,Content-Type,X-Requested-With,Accept,Origin,gray,Access-Control-Request-Method,Access-Control-Request-Headers,X-BK-Signature,X-BK-Date,X-BK-Merchant\\\", \\\"allowedRequestMethods\\\": [\\\"POST\\\", \\\"GET\\\", \\\"PUT\\\", \\\"DELETE\\\", \\\"OPTIONS\\\"]}\"}', '2019-04-11 12:08:08', 'admin');
 INSERT INTO `sys_data_backup` VALUES (60, 'gateway_service_plugin', 'DELETE', '{\"id\": 318, \"pluginId\": \"servicePlugin_562590045484089344\", \"gmtCreate\": 1554202319000, \"serviceId\": \"service_test_h5\", \"pluginName\": \"访问API限流插件\", \"pluginType\": \"RateLimitRequestPlugin\", \"gmtModified\": 1554202319000, \"pluginParam\": \"{\\\"rate\\\": 1, \\\"appId\\\": \\\"service_test_h5\\\", \\\"enabled\\\": \\\"Y\\\", \\\"perSeconds\\\": 2}\"}', '2019-04-11 12:08:08', 'admin');
+INSERT INTO `sys_data_backup` VALUES (61, 'gateway_service', 'UPDATE', '{\"id\": 212, \"gmtCreate\": 1545057275000, \"serviceId\": \"service_test_cloud\", \"gmtModified\": 1554892716000, \"serviceDesc\": \"服务化标准-cloud\", \"serviceName\": \"服务化_cloud\", \"serviceOwner\": \"admin\", \"servicePrefix\": \"/cloud-test\", \"approvalStatus\": \"Y\", \"serviceEnabled\": \"Y\"}', '2019-04-13 10:12:12', 'admin');
+INSERT INTO `sys_data_backup` VALUES (62, 'gateway_endpoint', 'UPDATE', '{\"id\": 781, \"gmtCreate\": 1554892717000, \"serviceId\": \"service_test_cloud\", \"endpointId\": \"endpoint_565606577524965376\", \"endpointUrl\": \"/queryName\", \"gmtModified\": 1554892717000, \"endpointMethod\": \"ALL\"}', '2019-04-13 10:12:12', 'admin');
+INSERT INTO `sys_data_backup` VALUES (63, 'gateway_service_router', 'UPDATE', '{\"id\": 202, \"routerId\": \"serviceRouter_565606577071980544\", \"gmtCreate\": 1554892716000, \"serviceId\": \"service_test_cloud\", \"routerType\": \"springcloud\", \"gmtModified\": 1554892716000, \"routerParam\": \"{\\\"group\\\": \\\"\\\", \\\"version\\\": \\\"\\\", \\\"serviceName\\\": \\\"TESLA-BACKEND-SAMPLE\\\", \\\"targetPrefix\\\": \\\"\\\", \\\"servicePrefix\\\": \\\"/cloud-test\\\"}\"}', '2019-04-13 10:12:12', 'admin');
+INSERT INTO `sys_data_backup` VALUES (64, 'gateway_service_plugin', 'UPDATE', '{\"id\": 342, \"pluginId\": \"servicePlugin_565606577285890048\", \"gmtCreate\": 1554892717000, \"serviceId\": \"service_test_cloud\", \"pluginName\": \"跨域支持插件\", \"pluginType\": \"CorsRequestPlugin\", \"gmtModified\": 1554892717000, \"pluginParam\": \"{\\\"allowedOrigins\\\": \\\"*\\\", \\\"allowCredentials\\\": \\\"Y\\\", \\\"allowedRequestHeaders\\\": \\\"X-BK-UUSSSO-Token,X-BK-UUSSSO-BToken,Connection,User-Agent,Cookie,Token,Access-Control-Allow-Origin,Content-Type,X-Requested-With,Accept,Origin,gray,Access-Control-Request-Method,Access-Control-Request-Headers,X-BK-Signature,X-BK-Date,X-BK-Merchant\\\", \\\"allowedRequestMethods\\\": [\\\"POST\\\", \\\"GET\\\", \\\"PUT\\\", \\\"DELETE\\\", \\\"OPTIONS\\\"]}\"}', '2019-04-13 10:12:12', 'admin');
+INSERT INTO `sys_data_backup` VALUES (65, 'gateway_service_plugin', 'UPDATE', '{\"id\": 341, \"pluginId\": \"servicePlugin_565606577109729280\", \"gmtCreate\": 1554892716000, \"serviceId\": \"service_test_cloud\", \"pluginName\": \"访问API限流插件\", \"pluginType\": \"RateLimitRequestPlugin\", \"gmtModified\": 1554892716000, \"pluginParam\": \"{\\\"rate\\\": 1, \\\"appId\\\": \\\"service_test_cloud\\\", \\\"enabled\\\": \\\"Y\\\", \\\"perSeconds\\\": 1}\"}', '2019-04-13 10:12:12', 'admin');
+INSERT INTO `sys_data_backup` VALUES (66, 'gateway_service', 'DELETE', '{\"id\": 215, \"gmtCreate\": 1545057275000, \"serviceId\": \"service_test_cloud\", \"gmtModified\": 1555150333000, \"serviceDesc\": \"服务化标准-cloud\", \"serviceName\": \"服务化_cloud\", \"serviceOwner\": \"admin\", \"servicePrefix\": \"/cloud-test\", \"approvalStatus\": \"Y\", \"serviceEnabled\": \"Y\"}', '2019-04-13 10:12:33', 'admin');
+INSERT INTO `sys_data_backup` VALUES (67, 'gateway_endpoint', 'DELETE', '{\"id\": 784, \"gmtCreate\": 1555150333000, \"serviceId\": \"service_test_cloud\", \"endpointId\": \"endpoint_566687100020195328\", \"endpointUrl\": \"/queryName\", \"gmtModified\": 1555150333000, \"endpointMethod\": \"ALL\"}', '2019-04-13 10:12:33', 'admin');
+INSERT INTO `sys_data_backup` VALUES (68, 'gateway_service_router', 'DELETE', '{\"id\": 205, \"routerId\": \"serviceRouter_566687099315552256\", \"gmtCreate\": 1555150333000, \"serviceId\": \"service_test_cloud\", \"routerType\": \"springcloud\", \"gmtModified\": 1555150333000, \"routerParam\": \"{\\\"group\\\": \\\"\\\", \\\"version\\\": \\\"\\\", \\\"serviceName\\\": \\\"TESLA-BACKEND-SAMPLE\\\", \\\"targetPrefix\\\": \\\"/order-service\\\", \\\"servicePrefix\\\": \\\"/cloud-test\\\"}\"}', '2019-04-13 10:12:33', 'admin');
+INSERT INTO `sys_data_backup` VALUES (69, 'gateway_service_plugin', 'DELETE', '{\"id\": 345, \"pluginId\": \"servicePlugin_566687099797897216\", \"gmtCreate\": 1555150333000, \"serviceId\": \"service_test_cloud\", \"pluginName\": \"跨域支持插件\", \"pluginType\": \"CorsRequestPlugin\", \"gmtModified\": 1555150333000, \"pluginParam\": \"{\\\"allowedOrigins\\\": \\\"*\\\", \\\"allowCredentials\\\": \\\"Y\\\", \\\"allowedRequestHeaders\\\": \\\"X-BK-UUSSSO-Token,X-BK-UUSSSO-BToken,Connection,User-Agent,Cookie,Token,Access-Control-Allow-Origin,Content-Type,X-Requested-With,Accept,Origin,gray,Access-Control-Request-Method,Access-Control-Request-Headers,X-BK-Signature,X-BK-Date,X-BK-Merchant\\\", \\\"allowedRequestMethods\\\": [\\\"POST\\\", \\\"GET\\\", \\\"PUT\\\", \\\"DELETE\\\", \\\"OPTIONS\\\"]}\"}', '2019-04-13 10:12:33', 'admin');
+INSERT INTO `sys_data_backup` VALUES (70, 'gateway_service_plugin', 'DELETE', '{\"id\": 344, \"pluginId\": \"servicePlugin_566687099370078208\", \"gmtCreate\": 1555150333000, \"serviceId\": \"service_test_cloud\", \"pluginName\": \"访问API限流插件\", \"pluginType\": \"RateLimitRequestPlugin\", \"gmtModified\": 1555150333000, \"pluginParam\": \"{\\\"rate\\\": 1, \\\"appId\\\": \\\"service_test_cloud\\\", \\\"enabled\\\": \\\"Y\\\", \\\"perSeconds\\\": 1}\"}', '2019-04-13 10:12:33', 'admin');
 
 -- ----------------------------
 -- Table structure for sys_dept
@@ -508,7 +514,7 @@ CREATE TABLE `sys_log`  (
   `ip` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'IP地址',
   `gmt_create` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20649 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 20656 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_log
@@ -13204,6 +13210,13 @@ INSERT INTO `sys_log` VALUES (20645, 1, 'admin', '查询AppKey配置列表', 29,
 INSERT INTO `sys_log` VALUES (20646, 1, 'admin', '登录', 15, 'io.github.tesla.ops.system.controller.LoginController.login()', NULL, '127.0.0.1', '2019-04-13 15:46:08');
 INSERT INTO `sys_log` VALUES (20647, 1, 'admin', '请求访问主页', 24, 'io.github.tesla.ops.system.controller.LoginController.index()', NULL, '127.0.0.1', '2019-04-13 15:46:08');
 INSERT INTO `sys_log` VALUES (20648, 1, 'admin', '查询AppKey配置列表', 103, 'io.github.tesla.ops.appkey.controller.GwAppkeyController.list()', NULL, '127.0.0.1', '2019-04-13 15:46:11');
+INSERT INTO `sys_log` VALUES (20649, 1, 'admin', '登录', 83, 'io.github.tesla.ops.system.controller.LoginController.login()', NULL, '172.23.0.1', '2019-04-13 10:11:04');
+INSERT INTO `sys_log` VALUES (20650, 1, 'admin', '请求访问主页', 44, 'io.github.tesla.ops.system.controller.LoginController.index()', NULL, '172.23.0.1', '2019-04-13 10:11:05');
+INSERT INTO `sys_log` VALUES (20651, 1, 'admin', '查询服务配置列表', 159, 'io.github.tesla.ops.gwservice.controller.GwServiceController.list()', NULL, '172.23.0.1', '2019-04-13 10:11:06');
+INSERT INTO `sys_log` VALUES (20652, 1, 'admin', '保存服务配置', 369, 'io.github.tesla.ops.gwservice.controller.GwServiceController.save()', NULL, '172.23.0.1', '2019-04-13 10:12:13');
+INSERT INTO `sys_log` VALUES (20653, 1, 'admin', '查询服务配置列表', 17, 'io.github.tesla.ops.gwservice.controller.GwServiceController.list()', NULL, '172.23.0.1', '2019-04-13 10:12:14');
+INSERT INTO `sys_log` VALUES (20654, 1, 'admin', '删除服务配置', 180, 'io.github.tesla.ops.gwservice.controller.GwServiceController.del()', NULL, '172.23.0.1', '2019-04-13 10:12:34');
+INSERT INTO `sys_log` VALUES (20655, 1, 'admin', '查询服务配置列表', 25, 'io.github.tesla.ops.gwservice.controller.GwServiceController.list()', NULL, '172.23.0.1', '2019-04-13 10:12:35');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -13448,7 +13461,7 @@ CREATE TABLE `sys_user`  (
   `gmt_create` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `gmt_modified` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
@@ -13472,3 +13485,4 @@ CREATE TABLE `sys_user_role`  (
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (1, 1, 1);
 INSERT INTO `sys_user_role` VALUES (2, 2, 2);
+
